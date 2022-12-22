@@ -1,0 +1,52 @@
+:PROPERTIES:
+:ID:       d43d609f-e64e-4f0c-905b-07d5b27e20c7
+:END:
+#+title: ShelleyEra
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Eras.html#t:ShelleyEra][ShelleyEra]]
+A type used as a tag to distinguish the Shelley era.
+
+#+begin_src haskell
+-- | A type used as a tag to distinguish the Byron era.
+data ByronEra
+
+-- | A type used as a tag to distinguish the Shelley era.
+data ShelleyEra
+
+-- | A type used as a tag to distinguish the Allegra era.
+data AllegraEra
+
+-- | A type used as a tag to distinguish the Mary era.
+data MaryEra
+
+-- | A type used as a tag to distinguish the Alonzo era.
+data AlonzoEra
+
+-- | A type used as a tag to distinguish the Babbage era.
+data BabbageEra
+
+instance HasTypeProxy ByronEra where
+    data AsType ByronEra = AsByronEra
+    proxyToAsType _ = AsByronEra
+
+instance HasTypeProxy ShelleyEra where
+    data AsType ShelleyEra = AsShelleyEra
+    proxyToAsType _ = AsShelleyEra
+
+instance HasTypeProxy AllegraEra where
+    data AsType AllegraEra = AsAllegraEra
+    proxyToAsType _ = AsAllegraEra
+
+instance HasTypeProxy MaryEra where
+    data AsType MaryEra = AsMaryEra
+    proxyToAsType _ = AsMaryEra
+
+instance HasTypeProxy AlonzoEra where
+    data AsType AlonzoEra = AsAlonzoEra
+    proxyToAsType _ = AsAlonzoEra
+
+instance HasTypeProxy BabbageEra where
+   data AsType BabbageEra = AsBabbageEra
+   proxyToAsType _ = AsBabbageEra
+
+#+end_src

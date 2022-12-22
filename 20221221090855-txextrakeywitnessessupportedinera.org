@@ -1,0 +1,32 @@
+:PROPERTIES:
+:ID:       f542c545-b3b0-4103-8b6a-e25c66c840d4
+:END:
+#+title: TxExtraKeyWitnessesSupportedInEra
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-TxBody.html#t:TxExtraKeyWitnessesSupportedInEra][TxExtraKeyWitnessesSupportedInEra]]
+
+#+begin_src haskell
+-- | A representation of whether the era supports transactions that specify
+-- in the body that they need extra key witnesses, and where this fact is
+-- visible to scripts.
+--
+-- Extra key witnesses visible to scripts are supported from the Alonzo era
+-- onwards.
+--
+data TxExtraKeyWitnessesSupportedInEra era where
+
+     ExtraKeyWitnessesInAlonzoEra  :: TxExtraKeyWitnessesSupportedInEra AlonzoEra
+     ExtraKeyWitnessesInBabbageEra :: TxExtraKeyWitnessesSupportedInEra BabbageEra
+
+deriving instance Eq   (TxExtraKeyWitnessesSupportedInEra era)
+deriving instance Show (TxExtraKeyWitnessesSupportedInEra era)
+
+extraKeyWitnessesSupportedInEra :: CardanoEra era
+                                -> Maybe (TxExtraKeyWitnessesSupportedInEra era)
+extraKeyWitnessesSupportedInEra ByronEra   = Nothing
+extraKeyWitnessesSupportedInEra ShelleyEra = Nothing
+extraKeyWitnessesSupportedInEra AllegraEra = Nothing
+extraKeyWitnessesSupportedInEra MaryEra    = Nothing
+extraKeyWitnessesSupportedInEra AlonzoEra  = Just ExtraKeyWitnessesInAlonzoEra
+extraKeyWitnessesSupportedInEra BabbageEra = Just ExtraKeyWitnessesInBabbageEra
+#+end_src

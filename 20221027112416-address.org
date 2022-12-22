@@ -1,0 +1,165 @@
+:PROPERTIES:
+:ID:       aec0c40a-2d89-412c-b65a-5e5a8a404737
+:END:
+#+title: address
+
+* Address
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Shelley.html#g:4][Payment address]]
+Constructing and inspecting a Shelley payment address
+Addresses are used as locations where assets live. The address determines the rights needed to spend assets at the address: in particular holding some signing key or being able to satisfy the conditions of a script.
+
+The address type is subtly from the ledger era in which each address type is valid: while Byron addresses are the only choice in the Byron era, the Shelley era and all subsequent eras support both Byron and Shelley addresses. The Address type param only says the type of the address (either Byron or Shelley). The AddressInEra type connects the address type with the era in which it is supported.
+
+There are currently two types of address:
+** [[id:0f903044-d427-40a4-97aa-27406a3824ad][ByronAddr]], Byron addresses, used the type tag ByronAddr
+** [[id:e25bfe71-f886-451d-8f8f-555680db9d2e][ShelleyAddr]], Shelley addresses, which use the type tag ShelleyAddr. Notably, Shelley addresses support scripts and stake delegation.
+
+#+begin_src haskell
+data Address addrtype where
+
+     -- | Byron addresses were the only supported address type in the original
+     -- Byron era.
+     --
+     ByronAddress
+       :: Byron.Address
+       -> Address ByronAddr
+
+     -- | Shelley addresses allow delegation. Shelley addresses were introduced
+     -- in Shelley era and are thus supported from the Shelley era onwards
+     --
+     ShelleyAddress
+       :: Shelley.Network
+       -> Shelley.PaymentCredential StandardCrypto
+       -> Shelley.StakeReference    StandardCrypto
+       -> Address ShelleyAddr
+       -- Note that the two ledger credential types here are parametrised by
+       -- the era, but in fact this is a phantom type parameter and they are
+       -- the same for all eras. See 'toShelleyAddr' below.
+
+deriving instance Eq   (Address addrtype)
+deriving instance Ord  (Address addrtype)
+deriving instance Show (Address addrtype)
+#+end_src
+
+** Constructors
+ByronAddress ∷ Address → Address ByronAddr
+ShelleyAddress ∷ Network → PaymentCredential StandardCrypto → StakeReference StandardCrypto → Address ShelleyAddr
+
+** Addresses
+*** bitcoin [[id:a27b5129-4d72-4cd5-a87a-6445a5e4a394][Addresses]]
+26-35 alphanumeric characters that is used to receive bitcoin.  There are several address formats:
+
+**** Taproot, Pay-to-Taproot, P2TR
+a Bech32m address, the most recent. supports
++ multi-key transactions
++ more advanced scripting
++ increased privacy
+  example:
+  `bc1pmzfrwwndsqmk5yh69yjr5lfgfg4ev8c0tsc06e
+
+***** Example
+  `bc1pmzfrwwndsqmk5yh69yjr5lfgfg4ev8c0tsc06e`
+
+**** SegWit, pay-to-witness -public-key-hash, P2WPKH
+Also known as SegWit or Bech32 address.
+***** Example
+Note that the address start `bc1q`
+`bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq`
+
+**** Script address - P2SH
+A pay-to-script-hash (P2SH), or script address, can have additional rules and functionality attached to the address. Script addresses are commonly used for multi-sig addresses, which can specify that signatures from several keys are required to authorize the transaction.
+
+***** Example
+Note that the address start `3`
+`3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy`
+
+**** Legacy address - P2PKH
+Pay to Public Key Hash, P2PKH. Legacy addresses start with `1`
+***** Example
+Note that address starts with `1`
+`1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2`
+
+** Cardano Address Specifications
+And address is a sequence of bytes that confroms to a particular format.
+In cardano [[https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki][Bech32]] and are [[https://tools.ietf.org/id/draft-msporny-base58-01.html][Bech58]] encoding used to encode addresses. these encoding have to be distinguishable from the byte sequence that they encode.
+*** paymewnt address comment from pluts:
+A payment address is sha256 hash followd by another sha256 hash of the utxo output's validator script. this correspond to BC pay-to-witness-script-hash
+
+** [[https://github.com/cardano-foundation/CIPs/tree/master/CIP-0005][CIPS]]
+Defines a set of common prefixes, so called human readable of Bech32.
+
+*** Motivation
+Many tools used within the Cardano eco-system are manipulating binary data. Binary data are typically encoded as hexadecimal text strings when shown in a user interface (might it be a console, a url or a structured document from a server). From the user perspective, it can be difficult to distinguish between various encoded data. From the tools developer perspective, it can also be difficult to validate inputs based only on raw bytes (in particular when encoded data often have the same length).
+
+Therefore, we can leverage bech32 for binary data encoding, with a set of common prefixes that can be used across tools and software to disambiguate payloads.
+
+** User-facing Encoding
+By convention, Shelley and stake address are encoded int Bech32.
++ cardaono does not impose no length limit.
++ prefixes are defined in [[https://github.com/cardano-foundation/CIPs/tree/master/CIP-0005][CIP0005]];
++ the most common prefix is addr, representing an address in main net
++ by convention Byron address are encoded in [[https://tools.ietf.org/id/draft-msporny-base58-01.html][Base58]]
++ Exmaples
+  + Shelley
+    addr1vpu5vlrf4xkxv2qpwngf6cjhtw542ayty80v8dyr49rf5eg0yu80w
+  + Byron 37btjrVyb4KDXBNC4haBVPCrro8AQPHwvCMp3RFhhSVWwfFmZ6wwzSK6JK1hY6wHNmtrpTf1kdbva8TCneM2YsiXT7mrzT21EacHnPpz5YyUdj64na
+*** Binary format of addresses
+Addresses are compramised of two parts
+
++ header, 1 byte
++ p`ayload, several bytes
+
+The payload length varies, depending on the header
+
+
+**** Shelley-Addresses
+there are currently 8 types of shelley addresses outlined in [[https://cips.cardano.org/cips/cip19/][CIP19]]
+
+| Header type(ttttt...) | Payment Part     | Delegation Part |
+|-----------------------+------------------+-----------------|
+|              0000.... | PaymenlltKeyHash | StakeKeyHash    |
+|              0001.... | ScriptHash       | StakeKeyHash    |
+|              0010.... | PaymentKeyHash   | ScriptHash      |
+|              0011.... | ScriptHash       | ScriptHash      |
+|              0100.... | PaymentKeyHash   | Pointer         |
+|              0101.... | ScriptHash       | Pointer         |
+|              0110.... | PaymentKeyHash   | 0               |
+|              0111.... | ScriptHash       | 0               |
+|-----------------------+------------------+-----------------|
+
+***** PublicKeyHash
+refers to blake2b-224 hash digests of Ed25519
+
+***** StakeKeyHash
+refers to blake2b-224 hash digests of Ed25519
+
+***** ScriptHash
+refer to blake2b-224 hash digests of serialized monetary scripts.
+
+***** Payment part
++ the first par of Shelley address indicates ownership of the funds associated with the address
++ in order to spend from address, one must provide witness attesting the address can be spent
++ in case of /PublicHash/ it means provide a signature of the transaction body made with the signing key corresponding to the hashed public key
+
+***** Delegation part
+the second part fo the Shelley address indicate the owner of the stake tights associated with the address, called the delegation part
++ most often the payment part & the delegation part owned by the same party
++ /mangled address/ or /hybrid address/ when payment part and delegation part are manged by different parties
+
+***** Pointer
+In an address, a chain pointer refers to point of the chain containing a stake key registration certificate. A point is defined by 3 coordinates
++ absolute slot number
++ transaction index (within that slot)
++ a (delegation) certificate index (within that transaction)
+
+**** Stake Addresses
+like Shelley-Addresses, stake addresses start with a single header byte identifying their type and the network, followed by 28 bytes of payload identifying either a stake key hash or a script hash.
+
+| Header type(ttttt...) | Stake Reference |
+|-----------------------+-----------------|
+|             1110....  | StakeKeyHash    |
+|             1111....  | ScriptHash      |
+***** StakeKeyHash
+***** ScriptHash
+

@@ -1,0 +1,53 @@
+:PROPERTIES:
+:ID:       d3fc9f5e-8fdd-4169-86e8-8113f4002035
+:END:
+#+title: ReferenceScript
+
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Script.html#g:5][ReferenceScript]]
+A reference script is a script that can exist at a transaction output, [[id:2cd1cdf4-0b6a-4d83-8bff-240da5fd79f1][TxOut]]
+
+#+begin_src haskell
+
+-- ----------------------------------------------------------------------------
+-- Reference scripts
+--
+
+-- | A reference scripts is a script that can exist at a transaction output. This greatly
+-- reduces the size of transactions that use scripts as the script no longer
+-- has to be added to the transaction, they can now be referenced via a transaction output.
+
+data ReferenceScript era where
+     ReferenceScript :: ReferenceTxInsScriptsInlineDatumsSupportedInEra era
+                     -> ScriptInAnyLang
+                     -> ReferenceScript era
+
+     ReferenceScriptNone :: ReferenceScript era
+
+deriving instance Eq (ReferenceScript era)
+deriving instance Show (ReferenceScript era)
+deriving instance Typeable (ReferenceScript era)
+
+instance IsCardanoEra era => ToJSON (ReferenceScript era) where
+  toJSON (ReferenceScript _ s) = object ["referenceScript" .= s]
+  toJSON ReferenceScriptNone = Aeson.Null
+
+instance IsCardanoEra era => FromJSON (ReferenceScript era) where
+  parseJSON = Aeson.withObject "ReferenceScript" $ \o ->
+    case refInsScriptsAndInlineDatsSupportedInEra (cardanoEra :: CardanoEra era) of
+      Nothing -> pure ReferenceScriptNone
+      Just refSupInEra ->
+        ReferenceScript refSupInEra <$> o .: "referenceScript"
+
+instance EraCast ReferenceScript where
+  eraCast toEra = \case
+    ReferenceScriptNone -> pure ReferenceScriptNone
+    v@(ReferenceScript (_ :: ReferenceTxInsScriptsInlineDatumsSupportedInEra fromEra) scriptInAnyLang) ->
+      case refInsScriptsAndInlineDatsSupportedInEra toEra of
+        Nothing -> Left $ EraCastError v (cardanoEra @fromEra) toEra
+        Just supportedInEra -> Right $ ReferenceScript supportedInEra scriptInAnyLang
+#+end_src
+** Constructors
+
+ReferenceScript ∷ ReferenceTxInsScriptsInlineDatumsSupportedInEra era → [[id:b480c849-0680-4ad9-a6d0-745f5dc97810][ScriptInAnyLang]]→ ReferenceScript era
+ReferenceScriptNone ∷ ReferenceScript era

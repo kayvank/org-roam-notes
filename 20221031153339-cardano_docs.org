@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       bbb4d644-c231-4cb7-91c0-01c38160300d
+:END:
+#+title: cardano-docs
+* [[https://docs.cardano.org/learn/cardano-node][cardano-docs]]
+** [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html][cardano-Api]]
+
+** [[https://docs.google.com/document/d/1fErBYgcRtxM8pjgRN5qXCuAlnlDchA1eQ__0_vT_ah8/edit#][PlutusScripts]]
+** [[https://plutus-apps.readthedocs.io/en/latest/plutus/explanations/plutus-tools-component-descriptions.html][plutus-tools]]
+** [[https://cips.cardano.org/cips/cip19/][CIPs]]
+** [[https://input-output.atlassian.net/wiki/spaces/PLU/pages/3431825409/Resources+for+New+Plutus+Team+Members][resources for new plutus team member]]
+** [[https://ucarecdn.com/e14c6f03-152d-4361-abaf-f1fee5eb2e4e/EUTXOhandbook3.pdf][EUtxo hadnbook]]

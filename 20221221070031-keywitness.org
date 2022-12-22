@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID:       24e0540a-24ec-424b-a4d7-8a4afdf62d54
+:END:
+#+title: KeyWitness
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#g:38][KeyWitness]]
+
+#+begin_src haskell
+data KeyWitness era where
+
+     ByronKeyWitness
+       :: Byron.TxInWitness
+       -> KeyWitness ByronEra
+
+     ShelleyBootstrapWitness
+       :: ShelleyBasedEra era
+       -> Shelley.BootstrapWitness StandardCrypto
+       -> KeyWitness era
+
+     ShelleyKeyWitness
+       :: ShelleyBasedEra era
+       -> Shelley.WitVKey Shelley.Witness StandardCrypto
+       -> KeyWitness era
+
+    #+end_src

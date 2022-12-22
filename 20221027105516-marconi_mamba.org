@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       61d772c2-792e-46e7-b8ac-5fa839b47bfa
+:END:
+#+title: marconi-mamba
+* marcoin-mamba
+marconi-mamba effort docs/requirement realted stuff
+** [[https://input-output.atlassian.net/wiki/spaces/EMU/pages/3405283333/Integration+points?focusedCommentId=3603791934#comment-3603791934][integration points]]

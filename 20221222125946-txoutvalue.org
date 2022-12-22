@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       4e575460-a5ed-4b73-aaa2-e10b88e0dc84
+:END:
+#+title: TxOutValue
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxOutValue][TxOutValue]]
+
+#+begin_src haskell
+data TxOutValue era where
+
+     TxOutAdaOnly :: OnlyAdaSupportedInEra era -> Lovelace -> TxOutValue era
+
+     TxOutValue   :: MultiAssetSupportedInEra era -> Value -> TxOutValue era
+     #+end_src

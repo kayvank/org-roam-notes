@@ -1,0 +1,30 @@
+:PROPERTIES:
+:ID:       e60638aa-6438-4cf8-85a7-6342bcf41c66
+:END:
+#+title: ScriptData
+
+*  [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:ScriptData][ScriptData]]
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Script data
+--
+
+data ScriptData = ScriptDataConstructor
+                                        Integer                     -- ^ Tag for the constructor
+                                        [ScriptData]                -- ^ Constructor arguments
+                | ScriptDataMap         [(ScriptData, ScriptData)]  -- ^ Key value pairs
+                | ScriptDataList        [ScriptData]                -- ^ Elements
+                | ScriptDataNumber      Integer
+                | ScriptDataBytes       BS.ByteString
+  deriving (Eq, Ord, Show)
+  -- Note the order of constructors is the same as the Plutus definitions
+  -- so that the Ord instance is consistent with the Plutus one.
+  -- This is checked by prop_ord_distributive_ScriptData
+
+instance HasTypeProxy ScriptData where
+    data AsType ScriptData = AsScriptData
+    proxyToAsType _ = AsScriptData
+
+#+end_src
+** Constructors

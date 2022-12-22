@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       167593b6-24c0-46d7-8099-ea44e0a7d51b
+:END:
+#+title: type-family
+* type-family
+** what are type families
+type families permit a program to compute what data constructors  it will operate on
+A type family interface definition declares its __kind__ and its arity, or the number of typ indeccides it takes.
+instance definition define the type family over some part of a domain
+*** Indexed type family
++ Indexed type family is a partial function at the type level
++ Applying the function to parameters,called indices,  yields a type

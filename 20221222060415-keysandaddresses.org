@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       8a10475a-e9b7-4293-879c-49b24967a82c
+:END:
+#+title: KeysAndAddresses
+
+
+** Stakeholder
+In [[id:b225f0c7-e825-4f26-aaef-e601ad85dc3d][Shelley]] era every stake holder can have two sets of keys
+*** Payment Keys and addresses
+To send and receive transactions
+*** Stake Keys and addresses
+To send protocol participation,create a stake poool, deligate and receive rewards
+*  [[https://github.com/input-output-hk/cardano-node/blob/master/doc/stake-pool-operations/3_keys_and_addresses.md#payment-key-pair][Creating keys/addresses]]

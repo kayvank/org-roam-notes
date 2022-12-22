@@ -1,0 +1,99 @@
+:PROPERTIES:
+:ID:       7eea1f63-7556-428d-84ad-a23a0d2f13da
+:END:
+#+title: Script
+
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#g:49][Script]]
+A script in a particular language.
+See also [[id:b480c849-0680-4ad9-a6d0-745f5dc97810][ScriptInAnyLang]]  for a script in any of the known languages.
+See also [[id:76a5a635-d226-4aee-8654-906da6b1aa2f][ScriptInEra]] for a script in a language that is available within a particular era.
+
+Note that some but not all scripts have an external JSON syntax, hence this type has no JSON serialisation instances. The SimpleScript family of languages do have a JSON syntax and thus have ToJSON/FromJSON instances.
+
+#+begin_src haskell
+-- | A script in a particular language.
+--
+-- See also 'ScriptInAnyLang' for a script in any of the known languages.
+--
+-- See also 'ScriptInEra' for a script in a language that is available within
+-- a particular era.
+--
+-- Note that some but not all scripts have an external JSON syntax, hence this
+-- type has no JSON serialisation instances. The 'SimpleScript' family of
+-- languages do have a JSON syntax and thus have 'ToJSON'\/'FromJSON' instances.
+--
+data Script lang where
+
+     SimpleScript :: !(SimpleScriptVersion lang)
+                  -> !(SimpleScript lang)
+                  -> Script lang
+
+     PlutusScript :: !(PlutusScriptVersion lang)
+                  -> !(PlutusScript lang)
+                  -> Script lang
+
+deriving instance (Eq   (Script lang))
+deriving instance (Show (Script lang))
+
+instance HasTypeProxy lang => HasTypeProxy (Script lang) where
+    data AsType (Script lang) = AsScript (AsType lang)
+    proxyToAsType _ = AsScript (proxyToAsType (Proxy :: Proxy lang))
+
+instance IsScriptLanguage lang => SerialiseAsCBOR (Script lang) where
+    serialiseToCBOR (SimpleScript SimpleScriptV1 s) =
+      CBOR.serialize' (toShelleyMultiSig s)
+
+    serialiseToCBOR (SimpleScript SimpleScriptV2 s) =
+      CBOR.serialize' (toAllegraTimelock s :: Timelock.Timelock StandardCrypto)
+
+    serialiseToCBOR (PlutusScript PlutusScriptV1 s) =
+      CBOR.serialize' s
+
+    serialiseToCBOR (PlutusScript PlutusScriptV2 s) =
+      CBOR.serialize' s
+
+    deserialiseFromCBOR _ bs =
+      case scriptLanguage :: ScriptLanguage lang of
+        SimpleScriptLanguage SimpleScriptV1 ->
+              SimpleScript SimpleScriptV1
+            . fromShelleyMultiSig
+          <$> CBOR.decodeAnnotator "Script" fromCBOR (LBS.fromStrict bs)
+
+        SimpleScriptLanguage SimpleScriptV2 ->
+              SimpleScript SimpleScriptV2
+            . (fromAllegraTimelock TimeLocksInSimpleScriptV2
+                                :: Timelock.Timelock StandardCrypto
+                                -> SimpleScript SimpleScriptV2)
+          <$> CBOR.decodeAnnotator "Script" fromCBOR (LBS.fromStrict bs)
+
+        PlutusScriptLanguage PlutusScriptV1 ->
+              PlutusScript PlutusScriptV1
+          <$> CBOR.decodeFull' bs
+
+        PlutusScriptLanguage PlutusScriptV2 ->
+              PlutusScript PlutusScriptV2
+          <$> CBOR.decodeFull' bs
+
+instance IsScriptLanguage lang => HasTextEnvelope (Script lang) where
+    textEnvelopeType _ =
+      case scriptLanguage :: ScriptLanguage lang of
+        SimpleScriptLanguage SimpleScriptV1 -> "SimpleScriptV1"
+        SimpleScriptLanguage SimpleScriptV2 -> "SimpleScriptV2"
+        PlutusScriptLanguage PlutusScriptV1 -> "PlutusScriptV1"
+        PlutusScriptLanguage PlutusScriptV2 -> "PlutusScriptV2"
+
+
+#+end_src
+
+** SimpleScript
+:PROPERTIES:
+:ID:       528d8c78-727a-445a-8ce6-2262735e8412
+:END:
+[[id:55842419-3472-46bf-956a-5b57a69830d4][SimpleScriptVersion]]
+
+** PlutusScript
+:PROPERTIES:
+:ID:       f40850a4-fb9a-4a0c-8ba3-82c28caf1ece
+:END:
+[[id:325f286d-780a-4fff-817d-0fe13890075d][PlutusScriptVersion]]

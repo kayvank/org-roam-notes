@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID:       6efbdb04-8ae1-4827-acfe-7d7d6fb42c1a
+:END:
+#+title: TxMetadataInEra
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxMetadataInEra][TxMetadataInEra]]
+** [[id:24b56b79-1b72-4aec-80e3-dd06153e224c][TxMetadataSupportedInEra]]
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Transaction metadata (era-dependent)
+--
+
+data TxMetadataInEra era where
+
+     TxMetadataNone  :: TxMetadataInEra era
+
+     TxMetadataInEra :: TxMetadataSupportedInEra era
+                     -> TxMetadata
+                     -> TxMetadataInEra era
+
+deriving instance Eq   (TxMetadataInEra era)
+deriving instance Show (TxMetadataInEra era)
+
+#+end_src

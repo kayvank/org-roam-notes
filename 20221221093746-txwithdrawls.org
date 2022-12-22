@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID:       43c05a04-5bc2-4927-95e8-a93d077a89bf
+:END:
+#+title: TxWithdrawls
+
+*  [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxWithdrawals][TxWithdrawals]]
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Withdrawals within transactions (era-dependent)
+--
+
+data TxWithdrawals build era where
+
+     TxWithdrawalsNone :: TxWithdrawals build era
+
+     TxWithdrawals     :: WithdrawalsSupportedInEra era
+                       -> [(StakeAddress, Lovelace,
+                            BuildTxWith build (Witness WitCtxStake era))]
+                       -> TxWithdrawals build era
+
+deriving instance Eq   (TxWithdrawals build era)
+deriving instance Show (TxWithdrawals build era)
+
+#+end_src

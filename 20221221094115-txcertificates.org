@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       cfcaace5-799c-4c90-a3e6-5d30d4ce67bd
+:END:
+#+title: TxCertificates
+
+*  [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxCertificates][TxCertificates]]
+
+#+begin_src  haskell
+-- ----------------------------------------------------------------------------
+-- Certificates within transactions (era-dependent)
+--
+
+data TxCertificates build era where
+
+     TxCertificatesNone :: TxCertificates build era
+
+     TxCertificates     :: CertificatesSupportedInEra era
+                        -> [Certificate]
+                        -> BuildTxWith build
+                             (Map StakeCredential (Witness WitCtxStake era))
+                        -> TxCertificates build era
+
+deriving instance Eq   (TxCertificates build era)
+deriving instance Show (TxCertificates build era)
+
+
+#+end_src

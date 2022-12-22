@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       fbb53678-aa97-4268-bddb-254d4ca45964
+:END:
+#+title: mithril
+* [[https://mithril.network/doc/mithril/intro][mithril]]
+Konstantinos introduced it on Oct/27/22
+see the [[https://github.com/input-output-hk/mithril][github repo]] for detail

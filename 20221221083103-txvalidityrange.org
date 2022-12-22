@@ -1,0 +1,40 @@
+:PROPERTIES:
+:ID:       d1cd95ec-f92e-46b3-af84-88fe62b30cb1
+:END:
+#+title: txValidityRange
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxValidityLowerBound][TxValidityLowerBound]]
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxValidityUpperBound][TxValidityUpperBound]]
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Transaction validity range
+--
+
+-- | This was formerly known as the TTL.
+--
+data TxValidityUpperBound era where
+
+     TxValidityNoUpperBound :: ValidityNoUpperBoundSupportedInEra era
+                            -> TxValidityUpperBound era
+
+     TxValidityUpperBound   :: ValidityUpperBoundSupportedInEra era
+                            -> SlotNo
+                            -> TxValidityUpperBound era
+
+deriving instance Eq   (TxValidityUpperBound era)
+deriving instance Show (TxValidityUpperBound era)
+
+
+data TxValidityLowerBound era where
+
+     TxValidityNoLowerBound :: TxValidityLowerBound era
+
+     TxValidityLowerBound   :: ValidityLowerBoundSupportedInEra era
+                            -> SlotNo
+                            -> TxValidityLowerBound era
+
+deriving instance Eq   (TxValidityLowerBound era)
+deriving instance Show (TxValidityLowerBound era)
+
+#+end_src

@@ -1,0 +1,34 @@
+:PROPERTIES:
+:ID:       6d1f5471-ebbe-4a5e-90f6-93ce9c6e6059
+:END:
+#+title: AuxScriptsSupportedInEra
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-TxBody.html#t:AuxScriptsSupportedInEra][AuxScriptsSupportedInEra]]
+
+#+begin_src haskell
+-- | A representation of whether the era supports auxiliary scripts in
+-- transactions.
+--
+-- Auxiliary scripts are supported from the Allegra era onwards.
+--
+data AuxScriptsSupportedInEra era where
+
+     AuxScriptsInAllegraEra :: AuxScriptsSupportedInEra AllegraEra
+     AuxScriptsInMaryEra    :: AuxScriptsSupportedInEra MaryEra
+     AuxScriptsInAlonzoEra  :: AuxScriptsSupportedInEra AlonzoEra
+     AuxScriptsInBabbageEra :: AuxScriptsSupportedInEra BabbageEra
+
+deriving instance Eq   (AuxScriptsSupportedInEra era)
+deriving instance Show (AuxScriptsSupportedInEra era)
+
+auxScriptsSupportedInEra :: CardanoEra era
+                         -> Maybe (AuxScriptsSupportedInEra era)
+auxScriptsSupportedInEra :: CardanoEra era -> Maybe (AuxScriptsSupportedInEra era)
+auxScriptsSupportedInEra ByronEra   = Nothing
+auxScriptsSupportedInEra ShelleyEra = Nothing
+auxScriptsSupportedInEra AllegraEra = Just AuxScriptsInAllegraEra
+auxScriptsSupportedInEra MaryEra    = Just AuxScriptsInMaryEra
+auxScriptsSupportedInEra AlonzoEra  = Just AuxScriptsInAlonzoEra
+auxScriptsSupportedInEra BabbageEra = Just AuxScriptsInBabbageEra
+
+#+end_src

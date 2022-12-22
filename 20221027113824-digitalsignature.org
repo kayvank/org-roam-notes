@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       a4d3d8a4-f8dc-45d3-bea3-846d0f32a04e
+:END:
+#+title: digitalsignature
+* Digital Signature
+* Digital Signature provides the recipient the following:
+** authentication
+** non-repudiation
+sender cannot deny  having sent the message
+** integrity
+* How are they created
+** hash the data
+** use private key to encrypt the hash, lets call it hash A
+** the encrypted hash is the digital signature
+* How are they verified
+** decrypt the digital signature using public key of the sender
++ This will create the original hashed doc, hash A
++ next apply the same algorithm to hash, hash A  -> hash B
++ compare (hash A, hash B) are the same, then bob has verified the signature

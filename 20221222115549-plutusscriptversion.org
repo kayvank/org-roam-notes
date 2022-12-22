@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       325f286d-780a-4fff-817d-0fe13890075d
+:END:
+#+title: PlutusScriptVersion
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Script.html#t:PlutusScriptVersion][PlutusScriptVersion]]
+
+#+begin_src haskell
+data PlutusScriptVersion lang where
+    PlutusScriptV1 :: PlutusScriptVersion PlutusScriptV1
+    PlutusScriptV2 :: PlutusScriptVersion PlutusScriptV2
+
+deriving instance (Eq   (PlutusScriptVersion lang))
+deriving instance (Show (PlutusScriptVersion lang))
+#+end_src
+** Constructor
++ [[id:487406ae-335d-400d-98f7-62e5d9d0a121][PlutusScriptV1]]
++ [[id:56b420ea-9227-4be7-8773-773b309d8c58][PlutuScriptV2]]

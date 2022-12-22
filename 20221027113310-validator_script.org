@@ -1,0 +1,68 @@
+:PROPERTIES:
+:ID:       6fb5613e-c32c-4fec-a3d7-a57fd777b6a8
+:END:
+#+title: validator-script
+* validator-script
+These notes are form the plutus-pioneer-program
+
+* writting validator scripts
+validator scripts are programs that can lock transaction output on the chain.
+the most important thing validators can do is fail, indicating attempt to spend the output is invalid.
+** validator arugments
+validatos receive some info form validating node:
+*** redeemer
+*** datum
+*** validation context
+** give :
++ script [[[id:aec0c40a-2d89-412c-b65a-5e5a8a404737][address]]]
++ UTXo that sits at that address
+then for any transaction that tries to consume that UTXo, a validation script is run:
+The validation script get as input:
+    + datum , comes from the UTXo
+    + redeemer, comes from the input
+    + and the context
+      the script context has two fields:
+      #+begin_src haskell
+        data ScriptContext = ScriptContext
+          {
+            scriptContextTxInfo :: TxInfo
+          , scriptContextPurpose :: ScriptPurpose
+          }
+      #+end_src
+
+      where the ScriptPurpose is:
+
+      #+begin_src haskell
+        data ScriptPurpose
+            = Minting CurrencySymbol
+            | Spending TxOutRef
+            | Rewarding StakingCredential
+            | Certifying DCer
+      #+end_src
+
+      And the other field, TxInfo contains all the context information abou the transaction
+
+      #+begin_src haskell
+-- | A pending transaction. This is the view as seen by validator scripts, so some details are stripped out.
+data TxInfo = TxInfo
+    { txInfoInputs      :: [TxInInfo] -- ^ Transaction inputs
+    , txInfoInputsFees  :: [TxInInfo]     -- ^ Transaction inputs designated to pay fees
+    , txInfoOutputs     :: [TxOut] -- ^ Transaction outputs
+    , txInfoFee         :: Value -- ^ The fee paid by this transaction.
+    , txInfoForge       :: Value -- ^ The 'Value' forged by this transaction.
+    , txInfoDCert       :: [DCert] -- ^ Digests of certificates included in this transaction
+    , txInfoWdrl        :: [(StakingCredential, Integer)] -- ^ Withdrawals
+    , txInfoValidRange  :: SlotRange -- ^ The valid range for the transaction.
+    , txInfoSignatories :: [PubKeyHash] -- ^ Signatures provided with the transaction, attested that they all signed the tx
+    , txInfoData        :: [(DatumHash, Datum)]
+    , txInfoId          :: TxId
+    -- ^ Hash of the pending transaction (excluding witnesses)
+    } deriving (Generic)
+      #+end_src
+* minting
+for [[id:803c046e-457a-4546-a4e1-ba136a0cb7da][minting]] the TcInfo.txInfoForge field contains non-zero value
+** validation script takes 3 args,
++ datum from UTXo
++ redeemer from validationScript
++ context from validationScript
+** minting policy script takes 1 input, the context == ScriptContext

@@ -1,0 +1,58 @@
+:PROPERTIES:
+:ID:       e67789ba-9f23-42ab-9765-9a07d76819f4
+:END:
+#+title: AddressAny
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Address.html#g:4][AddressAny]]
+Sometimes we need to be able to work with either of the two types of address (Byron or Shelley addresses), but without reference to an era in which the address will be used. This type serves that purpose.
+Either
++ [[id:0f903044-d427-40a4-97aa-27406a3824ad][ByronAddr]]  address
++ [[id:e25bfe71-f886-451d-8f8f-555680db9d2e][ShelleyAddr]]  address
+
+  #+begin_src haskell
+  -- ----------------------------------------------------------------------------
+-- Either type of address
+--
+
+-- | Either a Byron address or a Shelley address.
+--
+-- Sometimes we need to be able to work with either of the two types of
+-- address (Byron or Shelley addresses), but without reference to an era in
+-- which the address will be used. This type serves that purpose.
+--
+data AddressAny = AddressByron   !(Address ByronAddr)
+                | AddressShelley !(Address ShelleyAddr)
+  deriving (Eq, Ord, Show)
+
+instance HasTypeProxy AddressAny where
+    data AsType AddressAny = AsAddressAny
+    proxyToAsType _ = AsAddressAny
+
+instance SerialiseAsRawBytes AddressAny where
+    serialiseToRawBytes (AddressByron   addr) = serialiseToRawBytes addr
+    serialiseToRawBytes (AddressShelley addr) = serialiseToRawBytes addr
+
+    eitherDeserialiseFromRawBytes AsAddressAny bs =
+      case Shelley.deserialiseAddr bs of
+        Nothing -> Left (SerialiseAsRawBytesError "Unable to deserialise AddressAny")
+        Just (Shelley.AddrBootstrap (Shelley.BootstrapAddress addr)) ->
+          Right (AddressByron (ByronAddress addr))
+
+        Just (Shelley.Addr nw pc scr) ->
+          Right (AddressShelley (ShelleyAddress nw pc scr))
+
+instance SerialiseAddress AddressAny where
+    serialiseAddress (AddressByron   addr) = serialiseAddress addr
+    serialiseAddress (AddressShelley addr) = serialiseAddress addr
+
+    deserialiseAddress AsAddressAny t =
+          (AddressByron   <$> deserialiseAddress (AsAddress AsByronAddr)   t)
+      <|> (AddressShelley <$> deserialiseAddress (AsAddress AsShelleyAddr) t)
+
+
+fromShelleyAddrToAny :: Shelley.Addr StandardCrypto -> AddressAny
+fromShelleyAddrToAny (Shelley.AddrBootstrap (Shelley.BootstrapAddress addr)) =
+  AddressByron $ ByronAddress addr
+fromShelleyAddrToAny (Shelley.Addr nw pc scr) =
+  AddressShelley $ ShelleyAddress nw pc scr
+#+end_src

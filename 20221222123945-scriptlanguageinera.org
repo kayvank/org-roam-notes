@@ -1,0 +1,40 @@
+:PROPERTIES:
+:ID:       dbb6a183-2ea7-43c3-b416-5106d2892db8
+:END:
+#+title: ScriptLanguageInEra
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Script.html#t:ScriptLanguageInEra][ScriptLanguageInEra]]
+
+#+begin_src haskell
+data ScriptLanguageInEra lang era where
+
+     SimpleScriptV1InShelley :: ScriptLanguageInEra SimpleScriptV1 ShelleyEra
+     SimpleScriptV1InAllegra :: ScriptLanguageInEra SimpleScriptV1 AllegraEra
+     SimpleScriptV1InMary    :: ScriptLanguageInEra SimpleScriptV1 MaryEra
+     SimpleScriptV1InAlonzo  :: ScriptLanguageInEra SimpleScriptV1 AlonzoEra
+     SimpleScriptV1InBabbage :: ScriptLanguageInEra SimpleScriptV1 BabbageEra
+
+     SimpleScriptV2InAllegra :: ScriptLanguageInEra SimpleScriptV2 AllegraEra
+     SimpleScriptV2InMary    :: ScriptLanguageInEra SimpleScriptV2 MaryEra
+     SimpleScriptV2InAlonzo  :: ScriptLanguageInEra SimpleScriptV2 AlonzoEra
+     SimpleScriptV2InBabbage :: ScriptLanguageInEra SimpleScriptV2 BabbageEra
+
+     PlutusScriptV1InAlonzo  :: ScriptLanguageInEra PlutusScriptV1 AlonzoEra
+     PlutusScriptV1InBabbage :: ScriptLanguageInEra PlutusScriptV1 BabbageEra
+
+     PlutusScriptV2InBabbage :: ScriptLanguageInEra PlutusScriptV2 BabbageEra
+
+
+
+deriving instance Eq   (ScriptLanguageInEra lang era)
+deriving instance Show (ScriptLanguageInEra lang era)
+
+instance ToJSON (ScriptLanguageInEra lang era) where
+  toJSON sLangInEra = Aeson.String . Text.pack $ show sLangInEra
+
+
+instance HasTypeProxy era => HasTypeProxy (ScriptInEra era) where
+    data AsType (ScriptInEra era) = AsScriptInEra (AsType era)
+    proxyToAsType _ = AsScriptInEra (proxyToAsType (Proxy :: Proxy era))
+
+#+end_src

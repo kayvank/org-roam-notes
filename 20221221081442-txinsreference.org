@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:       b578954b-7e83-445e-9fbf-f99428f959d4
+:END:
+#+title: TxInsReference
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxInsReference][TxInsReference]]
+
+#+begin_src  haskell
+data TxInsReference build era where
+
+     TxInsReferenceNone :: TxInsReference build era
+
+     TxInsReference     :: ReferenceTxInsScriptsInlineDatumsSupportedInEra era
+                        -> [TxIn]
+                        -> TxInsReference build era
+
+deriving instance Eq   (TxInsReference build era)
+deriving instance Show (TxInsReference build era)
+#+end_src
+** Constructor
++ [[id:c5ca1ed8-22cd-4e01-ab9b-843bfe386131][TxIn]]

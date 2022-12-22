@@ -1,0 +1,43 @@
+:PROPERTIES:
+:ID:       9ee7646a-36df-47b8-b638-74396849b904
+:END:
+#+title: haskell
+* Haskell
+these are my haskell notes that I came accross and need to review
+**  fundemental building blocks are:
+*** terms
+exist at run time and are values that can be manipulated
+*** types
+are sanity check, proof to the compiler that the program makes some amount of sense
+** Type level programming
+The kind system is /the type system for types/
+*** types
+things that we manipulate
+***  kind
+the proof
+** /type/ can be used to
+*** refer to kind of types that have inhabitant
+*** anything that is not a *kind* or **term**
+** HKT, Higer Kineded Types
+types that have type variables
+Maybe :: Type -> Type
+Either :: Type -> Type -> Type
+** More interesting HKT
+MaybeT
+** Data kinds
++ normal every day programming
+#+begin_src haskell
+data Bool -- type constructor
+= True -- data constructor
+| False -- data constructor |
+#+begin_end
+
++ normal every day programming
+  using -XDataKinds
+
+#+begin_src haskell
+{-# LANGUAGE DataKinds #-}
+Kind Bool -- a new kind Bool
+= 'True -- Promoted data constructor 'True of kind BOOL
+| 'False -- Promoted data constructor 'False of kind BOOL |
+#+begin_end

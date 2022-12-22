@@ -1,0 +1,40 @@
+:PROPERTIES:
+:ID:       56b420ea-9227-4be7-8773-773b309d8c58
+:END:
+#+title: PlutuScriptV2
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Script.html#t:PlutusScriptV2][PlutusScriptV2]]
+
+#+begin_src haskell
+-- | The second version of the simple script language. It has all the features
+-- of 'SimpleScriptV1' plus new atomic predicates:
+--
+-- * require the time be before a given slot number
+-- * require the time be after a given slot number
+--
+-- This version of the language was introduced in the 'AllegraEra'.
+--
+data SimpleScriptV2
+
+-- | Place holder type to show what the pattern is to extend to multiple
+-- languages, not just multiple versions of a single language.
+--
+data PlutusScriptV1
+data PlutusScriptV2
+
+instance HasTypeProxy SimpleScriptV1 where
+    data AsType SimpleScriptV1 = AsSimpleScriptV1
+    proxyToAsType _ = AsSimpleScriptV1
+
+instance HasTypeProxy SimpleScriptV2 where
+    data AsType SimpleScriptV2 = AsSimpleScriptV2
+    proxyToAsType _ = AsSimpleScriptV2
+
+instance HasTypeProxy PlutusScriptV1 where
+    data AsType PlutusScriptV1 = AsPlutusScriptV1
+    proxyToAsType _ = AsPlutusScriptV1
+
+instance HasTypeProxy PlutusScriptV2 where
+    data AsType PlutusScriptV2 = AsPlutusScriptV2
+    proxyToAsType _ = AsPlutusScriptV2
+#+end_src

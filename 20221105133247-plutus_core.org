@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID:       47430d44-7881-49bc-8d46-e8d42c3bcba8
+:END:
+#+title: plutus-core
+* Plutus-core
+** [[https://playground.plutus.iohkdev.io/doc/haddock/plutus-ledger/html/Ledger.html#t:TxOutRef][docs]]
+* Plutus-core notes
+** [[https://plutus.readthedocs.io/en/latest/explanations/platform.html][plutus-platform]]
+plutus platform is desinged to work with distributed ledger
+Ledgers are:
++ account based, Ethereum
++ UTXO, Unspent Transaction Output based, Bitcoing
+*** UTXO and scripts
+ownership of UTXO
+outputs have public-key, hash of pub-key and to spend them the spending TX must be signed by the corresponding private key. This is called pay-to-pubkey
+
+*** EUTXO
+output can be locked by hash of a script, pay-to-script
+**** Script
+script is a program that decides whether the spending TX is allowed / authorized to do so. Such script is called [[id:6fb5613e-c32c-4fec-a3d7-a57fd777b6a8][validator-script]]
+***** Validator Scripts
+with EUTXO model, [[id:6fb5613e-c32c-4fec-a3d7-a57fd777b6a8][validator-script]] is passed three arguments
+****** datum
+data attached to output that script is locking, this is usually state
+****** redeemer
+data attached to input and is doing the spending. Provides input to the script from the spender
+****** context
+data represents info about the TX doing the spending.
+*** Plutus Applications
+**** off chain
+**** on chain, as part of validation. These are Plutus TX

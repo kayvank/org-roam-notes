@@ -1,0 +1,6 @@
+:PROPERTIES:
+:ID:       65469413-00d5-495f-89a5-384e53a3eebc
+:END:
+#+title: Technical-seminars
+Technical weekly seminars
+* [[https://drive.google.com/drive/folders/1qTftHTXIA_MIp2jwIh1BnA0od17h9Afp][google drive]]

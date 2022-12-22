@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       b86aca6c-75f0-44a6-98d2-18535bf06a07
+:END:
+#+title: UnspentOutput
+* [[https://input-output.atlassian.net/browse/PLT-173][PLT 173 Marconi indexer: Modify Address->Utxo indexer to index additionnal slot information]]
+create a tablle
+
+ Address
+ TxId
+ TxIdx
+ DatumHash
+ Datum
+ Value
+ InlineScriptHash
+ InlineScript
+ Slot
+ BlockNumber
+ transactionIndexWithinTheBlock

@@ -1,0 +1,19 @@
+:PROPERTIES:
+:ID:       fc6294d8-0a45-43c3-b219-b716558b2a0d
+:END:
+#+title: gpg
+
+* gpg
+** most of these for configuring my gitconfig for multi key
+*** export keys for a diff machind:
+#+begin_src sh
+gpg --export-ownertrust > file.txt
+#+end_src
+**** when exporting like this, the gpg data base is not exported to the new machine, therefore the keys uid is __[unknon]__
+to fix this:
+#+begin_src sh
+gpg --edit-key user@useremail.com
+gpg> trus
+#+end_src
+** for more detail, see [[https://unix.stackexchange.com/questions/407062/gpg-list-keys-command-outputs-uid-unknown-after-importing-private-key-onto][StackExchange]]
+** for more detail on how the setup [[https://jigarius.com/blog/signing-git-commits][gpg]]

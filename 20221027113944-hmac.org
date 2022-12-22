@@ -1,0 +1,8 @@
+:PROPERTIES:
+:ID:       7c4a4865-2635-469e-b00b-dcac2f33e81f
+:END:
+#+title: HMAC
+
+* HMAC
+Hashed-based Message Authentication Code and used to verify the integrity and authenticity of a message
+** [[https://www.ietf.org/rfc/rfc2104.txt][HMAC rfc]]

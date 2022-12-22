@@ -1,0 +1,61 @@
+:PROPERTIES:
+:ID:       c5ca1ed8-22cd-4e01-ab9b-843bfe386131
+:END:
+#+title: TxIn
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxIn][TxIn]]
+[[https://docs.cardano.org/learn/understanding%20outputs%20and%20inputs][Transaction input]] is the output of the previous transaction.
++ Transaction inputs include a pointer and a cryptographic signature that acts as the unlocking key,
++ The pointer points back to the previous transaction output, and the key unlocks this output.
++ When an output is unlocked by an input, the blockchain marks the unlucked as *spent*
++ New outputs (which have not been unlocked, i.e spent) are the UTXOs
+
+
+#+begin_src haskell
+data TxIn = TxIn TxId TxIx
+newtype TxIx = TxIx Word
+newtype TxId = TxId (Shelley.Hash StandardCrypto Shelley.EraIndependentTxBody)
+#+end_src
++ [[id:007111b4-b6cc-4fca-848e-fe1888bf5a52][TxId]]
++ [[id:e8e0ff4b-0fb3-4acb-acea-8ff2a122d856][TxIx]]
+
+*** related
+[[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxId][getTxId]]
+#+begin_src haskell
+-- | Calculate the transaction identifier for a 'TxBody'.
+--
+getTxId :: forall era. TxBody era -> TxId
+getTxId (ByronTxBody tx) =
+    TxId
+  . fromMaybe impossible
+  . Crypto.hashFromBytesShort
+  . Byron.abstractHashToShort
+  . Byron.hashDecoded
+  $ tx
+  where
+    impossible =
+      error "getTxId: byron and shelley hash sizes do not match"
+
+getTxId (ShelleyTxBody era tx _ _ _ _) =
+  obtainConstraints era $ getTxIdShelley era tx
+ where
+  obtainConstraints
+    :: ShelleyBasedEra era
+    -> ((Ledger.Crypto (ShelleyLedgerEra era) ~ StandardCrypto, Ledger.EraTxBody (ShelleyLedgerEra era)) => a)
+    -> a
+  obtainConstraints ShelleyBasedEraShelley f = f
+  obtainConstraints ShelleyBasedEraAllegra f = f
+  obtainConstraints ShelleyBasedEraMary    f = f
+  obtainConstraints ShelleyBasedEraAlonzo  f = f
+  obtainConstraints ShelleyBasedEraBabbage f = f
+
+getTxIdShelley
+  :: Ledger.Crypto (ShelleyLedgerEra era) ~ StandardCrypto
+  => Ledger.EraTxBody (ShelleyLedgerEra era)
+  => ShelleyBasedEra era -> Ledger.TxBody (ShelleyLedgerEra era) -> TxId
+getTxIdShelley _ tx =
+    TxId
+  . Crypto.castHash
+  . (\(Ledger.TxId txhash) -> SafeHash.extractHash txhash)
+  $ Ledger.txid tx
+
+#+end_src

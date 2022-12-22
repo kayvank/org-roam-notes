@@ -1,0 +1,59 @@
+:PROPERTIES:
+:ID:       24b56b79-1b72-4aec-80e3-dd06153e224c
+:END:
+#+title: TxMetadataSupportedInEra
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxMetadataSupportedInEra][TxMetadataSupportedInEra]]
+A representation of whether the era supports transaction metadata.
+Transaction metadata is supported from the Shelley era onwards.
+
+#+begin_src  haskell
+-- | A representation of whether the era supports transaction metadata.
+--
+-- Transaction metadata is supported from the Shelley era onwards.
+--
+data TxMetadataSupportedInEra era where
+
+     TxMetadataInShelleyEra :: TxMetadataSupportedInEra ShelleyEra
+     TxMetadataInAllegraEra :: TxMetadataSupportedInEra AllegraEra
+     TxMetadataInMaryEra    :: TxMetadataSupportedInEra MaryEra
+     TxMetadataInAlonzoEra  :: TxMetadataSupportedInEra AlonzoEra
+     TxMetadataInBabbageEra :: TxMetadataSupportedInEra BabbageEra
+
+deriving instance Eq   (TxMetadataSupportedInEra era)
+deriving instance Show (TxMetadataSupportedInEra era)
+
+txMetadataSupportedInEra :: CardanoEra era
+                         -> Maybe (TxMetadataSupportedInEra era)
+txMetadataSupportedInEra ByronEra   = Nothing
+txMetadataSupportedInEra ShelleyEra = Just TxMetadataInShelleyEra
+txMetadataSupportedInEra AllegraEra = Just TxMetadataInAllegraEra
+txMetadataSupportedInEra MaryEra    = Just TxMetadataInMaryEra
+txMetadataSupportedInEra AlonzoEra  = Just TxMetadataInAlonzoEra
+txMetadataSupportedInEra BabbageEra = Just TxMetadataInBabbageEra
+
+
+-- | A representation of whether the era supports auxiliary scripts in
+-- transactions.
+--
+-- Auxiliary scripts are supported from the Allegra era onwards.
+--
+data AuxScriptsSupportedInEra era where
+
+     AuxScriptsInAllegraEra :: AuxScriptsSupportedInEra AllegraEra
+     AuxScriptsInMaryEra    :: AuxScriptsSupportedInEra MaryEra
+     AuxScriptsInAlonzoEra  :: AuxScriptsSupportedInEra AlonzoEra
+     AuxScriptsInBabbageEra :: AuxScriptsSupportedInEra BabbageEra
+
+deriving instance Eq   (AuxScriptsSupportedInEra era)
+deriving instance Show (AuxScriptsSupportedInEra era)
+
+auxScriptsSupportedInEra :: CardanoEra era
+                         -> Maybe (AuxScriptsSupportedInEra era)
+auxScriptsSupportedInEra ByronEra   = Nothing
+auxScriptsSupportedInEra ShelleyEra = Nothing
+auxScriptsSupportedInEra AllegraEra = Just AuxScriptsInAllegraEra
+auxScriptsSupportedInEra MaryEra    = Just AuxScriptsInMaryEra
+auxScriptsSupportedInEra AlonzoEra  = Just AuxScriptsInAlonzoEra
+auxScriptsSupportedInEra BabbageEra = Just AuxScriptsInBabbageEra
+#+end_src

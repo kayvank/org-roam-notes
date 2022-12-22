@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:       cb30a740-fdeb-4e3f-a18d-6af387a3058c
+:END:
+#+title: TxBody
+
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxBody][TxBody]]
+
+#+begin_src haskell
+pattern TxBody :: TxBodyContent ViewTx era -> TxBody era
+#+end_src
+** [[id:6e2137cf-2eef-4c04-8372-feea2fde7fee][TxBodyContent]]

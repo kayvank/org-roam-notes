@@ -1,0 +1,45 @@
+:PROPERTIES:
+:ID:       5ebf7c87-82e6-43bf-9b1c-56702657204c
+:END:
+#+title: TxOutDatum
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxOutDatum][TxOutDatum]]
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Transaction output datum (era-dependent)
+--
+
+data TxOutDatum ctx era where
+
+     TxOutDatumNone   :: TxOutDatum ctx era
+
+     -- | A transaction output that only specifies the hash of the datum, but
+     -- not the full datum value.
+     --
+     TxOutDatumHash   :: ScriptDataSupportedInEra era
+                      -> Hash ScriptData
+                      -> TxOutDatum ctx era
+
+     -- | A transaction output that specifies the whole datum value. This can
+     -- only be used in the context of the transaction body, and does not occur
+     -- in the UTxO. The UTxO only contains the datum hash.
+     --
+     TxOutDatumInTx'  :: ScriptDataSupportedInEra era
+                      -> Hash ScriptData
+                      -> ScriptData
+                      -> TxOutDatum CtxTx era
+
+     -- | A transaction output that specifies the whole datum instead of the
+     -- datum hash. Note that the datum map will not be updated with this datum,
+     -- it only exists at the transaction output.
+     --
+     TxOutDatumInline :: ReferenceTxInsScriptsInlineDatumsSupportedInEra era
+                      -> ScriptData
+                      -> TxOutDatum ctx era
+
+deriving instance Eq   (TxOutDatum ctx era)
+deriving instance Show (TxOutDatum ctx era)
+#+end_src
+** Constructors
++ [[id:e60638aa-6438-4cf8-85a7-6342bcf41c66][ScriptData]]

@@ -1,0 +1,38 @@
+:PROPERTIES:
+:ID:       40f7ea56-773d-4067-832f-94c9b08d508b
+:END:
+#+title: TxTotalCollateral
+
+*  [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxTotalCollateral][TxTotalCollateral]]
+
+#+begin_src haskell
+data TxTotalCollateral era where
+
+     TxTotalCollateralNone :: TxTotalCollateral era
+
+     TxTotalCollateral     :: TxTotalAndReturnCollateralSupportedInEra era
+                           -> Lovelace
+                           -> TxTotalCollateral era
+
+deriving instance Eq   (TxTotalCollateral era)
+deriving instance Show (TxTotalCollateral era)
+
+data TxTotalAndReturnCollateralSupportedInEra era where
+
+     TxTotalAndReturnCollateralInBabbageEra :: TxTotalAndReturnCollateralSupportedInEra BabbageEra
+
+deriving instance Eq   (TxTotalAndReturnCollateralSupportedInEra era)
+deriving instance Show (TxTotalAndReturnCollateralSupportedInEra era)
+
+totalAndReturnCollateralSupportedInEra
+  :: CardanoEra era -> Maybe (TxTotalAndReturnCollateralSupportedInEra era)
+totalAndReturnCollateralSupportedInEra ByronEra = Nothing
+totalAndReturnCollateralSupportedInEra ShelleyEra = Maybe (TxTotalAndReturnCollateralSupportedInEra era)
+forall a. Maybe a
+Nothing
+totalAndReturnCollateralSupportedInEra AllegraEra = Nothing
+totalAndReturnCollateralSupportedInEra MaryEra = Nothing
+totalAndReturnCollateralSupportedInEra AlonzoEra = Nothing
+totalAndReturnCollateralSupportedInEra BabbageEra = Just TxTotalAndReturnCollateralInBabbageEra
+
+#+end_src

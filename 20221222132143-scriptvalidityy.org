@@ -1,0 +1,36 @@
+:PROPERTIES:
+:ID:       3362f3a4-0b99-48dd-a192-e5020f268acf
+:END:
+#+title: ScriptValidity
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:ScriptValidity][ScriptValidity]]
+Indicates whether a script is expected to fail or pass validation.
+
+#+begin_src haskell
+
+-- | Indicates whether a script is expected to fail or pass validation.
+data ScriptValidity
+  = ScriptInvalid -- ^ Script is expected to fail validation.
+                  -- Transactions marked as such can include scripts that fail validation.
+                  -- Such transactions may be submitted to the chain, in which case the
+                  -- collateral will be taken upon on chain script validation failure.
+
+  | ScriptValid   -- ^ Script is expected to pass validation.
+                  -- Transactions marked as such cannot include scripts that fail validation.
+
+  deriving (Eq, Show)
+
+instance ToCBOR ScriptValidity where
+  toCBOR = toCBOR . scriptValidityToIsValid
+
+instance FromCBOR ScriptValidity where
+  fromCBOR = isValidToScriptValidity <$> fromCBOR
+
+scriptValidityToIsValid :: ScriptValidity -> Alonzo.IsValid
+scriptValidityToIsValid ScriptInvalid = Alonzo.IsValid False
+scriptValidityToIsValid ScriptValid = Alonzo.IsValid True
+
+isValidToScriptValidity :: Alonzo.IsValid -> ScriptValidity
+isValidToScriptValidity (Alonzo.IsValid False) = ScriptInvalid
+isValidToScriptValidity (Alonzo.IsValid True) = ScriptValid
+#+end_src

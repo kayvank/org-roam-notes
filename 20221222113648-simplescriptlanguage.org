@@ -1,0 +1,24 @@
+:PROPERTIES:
+:ID:       23de1153-edeb-4c92-a49e-23dccdbf9ddd
+:END:
+#+title: SimpleScriptLanguage
+
+[[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Script.html#t:ScriptLanguage][ScriptLanguage]]
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Value level representation for script languages
+--
+data ScriptLanguage lang where
+
+     SimpleScriptLanguage :: SimpleScriptVersion lang -> ScriptLanguage lang
+
+     PlutusScriptLanguage :: PlutusScriptVersion lang -> ScriptLanguage lang
+
+deriving instance (Eq   (ScriptLanguage lang))
+deriving instance (Show (ScriptLanguage lang))
+#+end_src`
+** Constructors
+
+SimpleScriptLanguage  ∷ [[id:55842419-3472-46bf-956a-5b57a69830d4][SimpleScriptVersion]]  lang → ScriptLanguage lang
+PlutusScriptLanguae ∷ [[id:325f286d-780a-4fff-817d-0fe13890075d][PlutusScriptVersion]] lang → ScriptLanguage lang

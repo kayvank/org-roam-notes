@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID:       80ab3342-c908-46e2-968f-64c24a45b56f
+:END:
+#+title: TxAuxScripts
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-TxBody.html#t:TxAuxScripts][TxAuxScripts]]
+** [[id:6d1f5471-ebbe-4a5e-90f6-93ce9c6e6059][AuxScriptsSupportedInEra]]
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Auxiliary scripts (era-dependent)
+--
+
+data TxAuxScripts era where
+
+     TxAuxScriptsNone :: TxAuxScripts era
+
+     TxAuxScripts     :: AuxScriptsSupportedInEra era
+                      -> [ScriptInEra era]
+                      -> TxAuxScripts era
+
+deriving instance Eq   (TxAuxScripts era)
+deriving instance Show (TxAuxScripts era)
+
+#+end_src

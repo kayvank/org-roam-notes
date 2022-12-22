@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       3b87ff3f-f08a-42c2-8990-aab71f19e89a
+:END:
+#+title: AddressTypeInEra
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Address.html#t:AddressTypeInEra][AddressTypeInEra]]
+
+#+begin_src haskell
+
+data AddressTypeInEra addrtype era where
+
+     ByronAddressInAnyEra :: AddressTypeInEra ByronAddr era
+
+     ShelleyAddressInEra  :: ShelleyBasedEra era
+                          -> AddressTypeInEra ShelleyAddr era
+
+deriving instance Show (AddressTypeInEra addrtype era)
+#+end_src

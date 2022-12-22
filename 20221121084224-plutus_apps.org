@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       2f018162-0033-4aaf-a826-ec37f5ce4e27
+:END:
+#+title: plutus-apps
+* plutus-apps
+this is a collection of notes that I frequently need to remember
+** Tip and Point
+See `Plutus.ChainIndex.Types` for detail
+the main diff is:
++  When performing a rollback the chain sync protocol does not provide a block  number where to resume from.

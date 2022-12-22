@@ -1,0 +1,38 @@
+:PROPERTIES:
+:ID:       698ae675-7afa-40ae-bfe6-791e80658813
+:END:
+#+title: cardano-components
+* cardano-components
+this is not a comprehensive anatomy, rather my study notes as I come accross each system
+* cardano
+
+** [[https://docs.cardano.org/explore-cardano/cardano-architecture][system components]]
+*** [[file:../roam/20220909111438-cardano_node.org][cardano-node]]CLI
+**** cli
++ query node for info
++ submite tx[[id:a88694aa-8286-40c0-8940-a2e7e2259f33][cardano]]
++ build and sign tx
++ manage keys
+
+*** Daedalus [[file:../roam/20220909133717-hd_wallets.org][HD-Wallets]]db-sync
+You can only trust nodes run by you or your organization. This is why Daedalus runs a node in the background.
+*** graphql
+*** smash server
+** about the Eras
+There are several eras within the evolution of Cardano:
++ Byron
++ Shelley
++ Goguen
++ Basho
++ Voltaire
+
+Each Era refers to the rules of the ledger. For example, what transaction types and what data is stored in the ledger, or the validity and meaning of the transactions.
+*** implementation
+**** 2017 Byron ledger rules exclusively
+**** 2020 Shelly rules
+Shelly's many features include:
++ managing hard forks
++ multi assets
++ ...
+This means Byron and Shelly may co-exist on cardano ledger
+****  Shelley Incentivized Testnet (ITN)

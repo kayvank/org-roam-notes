@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:       69149f41-c95e-4058-945f-84920c19aaf3
+:END:
+#+title: TxFee
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxFee][TxFee]]
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Transaction fees
+--
+
+data TxFee era where
+
+     TxFeeImplicit :: TxFeesImplicitInEra era -> TxFee era
+
+     TxFeeExplicit :: TxFeesExplicitInEra era -> Lovelace -> TxFee era
+
+deriving instance Eq   (TxFee era)
+deriving instance Show (TxFee era)
+
+#+end_src

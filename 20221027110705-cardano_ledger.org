@@ -1,0 +1,67 @@
+:PROPERTIES:
+:ID:       8f676543-c34f-4815-8ccd-cd6744bc7d3a
+:END:
+#+title: cardano-ledger
+Many of the default parameters used in:plutus-apps [[https://github.com/input-output-hk/plutus-apps/blob/main/plutus-ledger/src/Ledger/Params.hs][Ledger.Params Params.hs]] come from [[https://github.com/input-output-hk/cardano-ledger/blob/master/eras/babbage/impl/src/Cardano/Ledger/Babbage/PParams.hs][Cardano.Ledger.Babbage.PParams]]
+
+
+* Extended UTXO, EUTXO Ledger Model
+** Enhanced scrripting
+*** validity interval
+*** redeemer script, redeemer object
+*** unspent outputs
+*** validator scripts
+
+*** Validator performs output validation using three inputs:
+**** datum
+**** redeemer
+**** context
+** Ledger Primitives
+
+*** Types and operations
+**** Quantity
+**** slotNumber
+**** Address
+**** DataHash
+**** TxId
+**** Script
+scriptAddr :: Script -> Address
+**** Script -> Data x Data ...
+***  Defined types
+**** Output
+***** addr
+Address, the address of the validator script for this output
+***** value :: Quantity
+***** datumHash :: DataHash
+**** OutputRef
+***** id
+TxId
+***** index
+TxIx,  Int
+**** Input
+***** outputRf
+OutPutRef
+***** validator
+Script
+Note that datum objects and validators are provided as input, eventhought they are conceptually part of the output.
+***** datum
+Data
+***** redeemer
+Data
+**** Tx
+***** inputs
+Fin Set [Input]
+***** outputs
+List [Output]
+***** validity-interval
+interval [SlotNumber]
+***** datum-witness
+Fin Sup [DatamHash, Datum]
+transactions may include a full value of datum for each output that it creates
+***** fee
+Quantity
+***** forge
+Quantity
+
+**** Leger
+***** List [Tx]

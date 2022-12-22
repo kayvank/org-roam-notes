@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:       4198e54e-6cc1-4fe6-b11e-6de0b8a83678
+:END:
+#+title: cabal
+* cabal notes
+* cabal related notes
+** project configuration
+full configuration is determined by combining the following
+***  ~/.cabal/config
+  user-wide global config
+*** cabal.project
+  project configuration
+*** cabal.project.freeze
+  output from :
+  #+begin_src shell
+  cabal freeze
+  #+end_src
+*** cabal.project.local
+  output from :
+  #+begin_src shell
+  cabal configure
+  #+end_src

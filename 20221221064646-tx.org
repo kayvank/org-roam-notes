@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       b37df8cb-92cd-4340-b347-38ffa0ae5251
+:END:
+#+title: Tx
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:Tx][Tx]]
+Blockchain transactions may have multiple inputs and multiple outputs
+A transaction is the action that unlocks previous outputs and creates new ones
+[[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:Tx][Tx]]
+#+begin_src haskell
+pattern Tx :: TxBody era -> [KeyWitness] -> Tx era
+#+end_src
+** [[id:cb30a740-fdeb-4e3f-a18d-6af387a3058c][TxBody]]
+** [[id:24e0540a-24ec-424b-a4d7-8a4afdf62d54][KeyWitness]]

@@ -1,0 +1,53 @@
+:PROPERTIES:
+:ID:       152399c8-05ae-4334-b1a6-5a3342462ae4
+:END:
+#+title: environments
+* Environments
+The official Cardano Environment configuration files [[https://book.world.dev.cardano.org/environments.html][Environments]]
+Here are the relevant scripts to download them
+** mainnet
+#+begin_src shell
+#!/usr/bin/env sh
+
+## mainnet
+##
+wget https://book.world.dev.cardano.org/environments/mainnet/config.json
+wget https://book.world.dev.cardano.org/environments/mainnet/db-sync-config.json
+wget https://book.world.dev.cardano.org/environments/mainnet/submit-api-config.json
+wget https://book.world.dev.cardano.org/environments/mainnet/topology.json
+wget https://book.world.dev.cardano.org/environments/mainnet/byron-genesis.json
+wget https://book.world.dev.cardano.org/environments/mainnet/shelley-genesis.json
+wget https://book.world.dev.cardano.org/environments/mainnet/alonzo-genesis.json
+#+end_src
+
+** pre-prod
+#+begin_src shell
+#!/usr/bin/env sh
+
+## preprd
+##
+wget https://book.world.dev.cardano.org/environments/preprod/config.json
+wget https://book.world.dev.cardano.org/environments/preprod/db-sync-config.json
+wget https://book.world.dev.cardano.org/environments/preprod/submit-api-config.json
+wget https://book.world.dev.cardano.org/environments/preprod/topology.json
+wget https://book.world.dev.cardano.org/environments/preprod/byron-genesis.json
+wget https://book.world.dev.cardano.org/environments/preprod/shelley-genesis.json
+wget https://book.world.dev.cardano.org/environments/preprod/alonzo-genesis.json
+
+#+end_src
+
+** preview-testnet
+#+begin_src shell
+#!/usr/bin/env sh
+##
+## download preview-testnet
+##
+wget https://book.world.dev.cardano.org/environments/preview/config.json
+wget https://book.world.dev.cardano.org/environments/preview/db-sync-config.json
+wget https://book.world.dev.cardano.org/environments/preview/submit-api-config.json
+wget https://book.world.dev.cardano.org/environments/preview/topology.json
+wget https://book.world.dev.cardano.org/environments/preview/byron-genesis.json
+wget https://book.world.dev.cardano.org/environments/preview/shelley-genesis.json
+wget https://book.world.dev.cardano.org/environments/preview/alonzo-genesis.json
+
+#+end_src

@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:       c270124c-9511-4557-84d8-92a1f58de4f3
+:END:
+#+title: BlockInMode
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:BlockInMode][BlockInMode]]
+A Block in one of the eras supported by a given protocol mode.
+For multi-era modes such as the CardanoMode this type is a sum of the different block types for all the eras. It is used in the ChainSync protocol.
+#+begin_src haskell
+data BlockInMode mode where
+     BlockInMode :: IsCardanoEra era => Block era -> EraInMode era mode -> BlockInMode mode
+#+end_src
+* [[id:405a0e60-b6d1-4d6b-a98a-5baf44158dd0][Block]]

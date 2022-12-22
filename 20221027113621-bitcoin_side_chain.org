@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       df4acfdb-e485-4db5-8bed-0ae8fb5fc378
+:END:
+#+title: bitcoin-side-chain
+* [[https://bitcoinops.org/en/topics/sidechains/][Sidechains]]
+also called two-way pegged sidechains, are block chains whose native unit of currency is the same as another block chain.
+In the context of bitcoin, sidechains use a mechanisim where
++ bitcoins are deposited into contract in the Bitcoin block chain
++ equal amount of bitcoin are created in the sidechain for spending
++ users on the sidechain can then:
+  + send sidechain bitcoins to a special contract that destroys them
+  + And release a corresponding amount of bitcoins previousely depositedon the contract on the Bitcoin block chain
+
+** Federated sidechains
+have depositors send their mainnet biticoin to a multisig contract controlled by a federation of signatories who also control the production of block on the sidechain
+** Derivechains
+are a type of proposed decentralized sidechains where depositors send their mainnet bitcoins into a contract controlled by anonymous Bitcoin miners who also control the block production on the side chain

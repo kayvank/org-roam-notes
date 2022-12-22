@@ -1,0 +1,161 @@
+:PROPERTIES:
+:ID:       405a0e60-b6d1-4d6b-a98a-5baf44158dd0
+:END:
+#+title: Block
+
+** [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:Block][Block]]
++ [[id:b7949b07-a7f5-40ac-bba1-07c44260bece][BlockHeader ]]BlockHeader
++ [[id:b37df8cb-92cd-4340-b347-38ffa0ae5251][Tx]]
+  + [[TxBody]]
+    +[[id:6e2137cf-2eef-4c04-8372-feea2fde7fee][TxBodyContent]]
+      + [[TxIns]]
+        + [[TxIn]]
+          + [[TxId]]
+          + [[TxIx]]
+      + [[TxOut]]
+        + [[AddressInEra]]
+        + [[TxOutValue]]
+        + [[TxOutDatum]] ctx
+        + [[ReferenceScript]]
+
+#+begin_src haskell
+-- Blocks in an era
+--
+
+-- | A blockchain block in a particular Cardano era.
+--
+data Block era where
+
+     ByronBlock :: Consensus.ByronBlock
+                -> Block ByronEra
+
+     ShelleyBlock :: ShelleyBasedEra era
+                  -> Consensus.ShelleyBlock (ConsensusProtocol era) (ShelleyLedgerEra era)
+                  -> Block era
+
+-- | A block consists of a header and a body containing transactions.
+--
+pattern Block :: BlockHeader -> [Tx era] -> Block era
+pattern Block header txs <- (getBlockHeaderAndTxs -> (header, txs))
+
+{-# COMPLETE Block #-}
+
+getBlockHeaderAndTxs :: Block era -> (BlockHeader, [Tx era])
+getBlockHeaderAndTxs block = (getBlockHeader block, getBlockTxs block)
+#+end_src
+
+****** [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxIns][TxIns]]
+
+#+begin_src haskell
+type TxIns build era = [(TxIn, BuildTxWith build (Witness WitCtxTxIn era))]
+data BuildTx
+data ViewTx
+data BuildTxWith build a where
+     ViewTx      ::      BuildTxWith ViewTx  a
+     BuildTxWith :: a -> BuildTxWith BuildTx a
+#+end_src
+******* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxIn][TxIn]]
+
+#+begin_src haskell
+data TxIn = TxIn TxId TxIx
+newtype TxIx = TxIx Word
+newtype TxId = TxId (Shelley.Hash StandardCrypto Shelley.EraIndependentTxBody)
+#+end_src
+******* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxOut][TxOut]]
+
+#+begin_src haskell
+data TxOut ctx era = TxOut (AddressInEra    era)
+                           (TxOutValue      era)
+                           (TxOutDatum ctx  era)
+                           (ReferenceScript era)
+#+end_src
+
+******** [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:AddressInEra][AddressInEra]]
+
+#+begin_src haskell
+data AddressInEra era where
+     AddressInEra :: AddressTypeInEra addrtype era
+                  -> Address addrtype
+                  -> AddressInEra era
+#+end_src
+******** [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxOutValue][TxOutValue]]
+#+begin_src haskell
+data TxOutValue era where
+
+     TxOutAdaOnly :: OnlyAdaSupportedInEra era -> Lovelace -> TxOutValue era
+
+     TxOutValue   :: MultiAssetSupportedInEra era -> Value -> TxOutValue era
+#+end_src
+******** TxOutDatum
+ [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxOutDatum][TxOutDatum]]
+
+#+begin_src haskell
+data TxOutDatum ctx era where
+
+     TxOutDatumNone   :: TxOutDatum ctx era
+
+     -- | A transaction output that only specifies the hash of the datum, but
+     -- not the full datum value.
+     --
+     TxOutDatumHash   :: ScriptDataSupportedInEra era
+                      -> Hash ScriptData
+                      -> TxOutDatum ctx era
+
+     -- | A transaction output that specifies the whole datum value. This can
+     -- only be used in the context of the transaction body, and does not occur
+     -- in the UTxO. The UTxO only contains the datum hash.
+     --
+     TxOutDatumInTx'  :: ScriptDataSupportedInEra era
+                      -> Hash ScriptData
+                      -> ScriptData
+                      -> TxOutDatum CtxTx era
+
+     -- | A transaction output that specifies the whole datum instead of the
+     -- datum hash. Note that the datum map will not be updated with this datum,
+     -- it only exists at the transaction output.
+     --
+     TxOutDatumInline :: ReferenceTxInsScriptsInlineDatumsSupportedInEra era
+                      -> ScriptData
+                      -> TxOutDatum ctx era
+#+end_src
+
+******** ReferenceScript
+[[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Script.html#t:ReferenceScript][ReferenceScript]] A reference scripts is a script that can exist at a transaction output.
+This greatly reduces the size of transactions that use scripts as the script no longer
+has to be added to the transaction, they can now be referenced via a transaction output.
+
+#+begin_src haskell
+data ReferenceScript era where
+     ReferenceScript :: ReferenceTxInsScriptsInlineDatumsSupportedInEra era
+                     -> ScriptInAnyLang
+                     -> ReferenceScript era
+     ReferenceScriptNone :: ReferenceScript era
+
+data ReferenceTxInsScriptsInlineDatumsSupportedInEra era where
+    ReferenceTxInsScriptsInlineDatumsInBabbageEra :: ReferenceTxInsScriptsInlineDatumsSupportedInEra BabbageEra
+
+#+end_src
+
+**** [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:KeyWitness][KeyWitness]]
+
+** AddressAny
+[[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:AddressInEra][AddressAny]] Either a Byron address or a Shelley address.
+Sometimes we need to be able to work with either of the two types of
+address (Byron or Shelley addresses), but without reference to an era in
+which the address will be used. This type serves that purpose.
+
+#+begin_src haskell
+data AddressAny = AddressByron !(Address ByronAddr) | AddressShelley !(Address ShelleyAddr)
+#+end_src
+* UTxO
+[[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:UTxO][UTxO]] unspent transactions[[id:d6282701-af4a-4c6f-9d60-ddfdab0fdb71][
+utxo]]
+#+begin_src haskell
+newtype UTxO era = UTxO { unUTxO :: Map TxIn (TxOut CtxUTxO era) }
+
+-- | The context is a transaction body
+data CtxTx
+-- | The context is the UTxO
+data CtxUTxO
+
+#+end_src

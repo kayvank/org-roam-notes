@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       e8e0ff4b-0fb3-4acb-acea-8ff2a122d856
+:END:
+#+title: TxIx
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxIx][TxIx]]
+
+#+begin_src haskell
+newtype TxIx = TxIx Word
+  deriving stock (Eq, Ord, Show)
+  deriving newtype (Enum)
+  deriving newtype (ToJSON, FromJSON)
+
+#+end_src

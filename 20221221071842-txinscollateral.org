@@ -1,0 +1,30 @@
+:PROPERTIES:
+:ID:       1d156b7b-565a-4a9b-b677-296b21b93eb5
+:END:
+#+title: TxInsCollateral
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxInsCollateral][TxInsCollateral]]
+
+#+begin_src haskell
+data TxInsCollateral era where
+
+     TxInsCollateralNone :: TxInsCollateral era
+
+     TxInsCollateral     :: CollateralSupportedInEra era
+                         -> [TxIn] -- Only key witnesses, no scripts.
+                         -> TxInsCollateral era
+
+deriving instance Eq   (TxInsCollateral era)
+deriving instance Show (TxInsCollateral era)
+
+data TxInsReference build era where
+
+     TxInsReferenceNone :: TxInsReference build era
+
+     TxInsReference     :: ReferenceTxInsScriptsInlineDatumsSupportedInEra era
+                        -> [TxIn]
+                        -> TxInsReference build era
+
+deriving instance Eq   (TxInsReference build era)
+deriving instance Show (TxInsReference build era)
+#+end_src

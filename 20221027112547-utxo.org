@@ -1,0 +1,69 @@
+:PROPERTIES:
+:ID:       d6282701-af4a-4c6f-9d60-ddfdab0fdb71
+:END:
+#+title: utxo
+* [[https://ucarecdn.com/e14c6f03-152d-4361-abaf-f1fee5eb2e4e/EUTXOhandbook3.pdf][Cardano EUTXO hadnbook]]
+** Accounting Model
+Blockchain networks require an accounting model to determine who owns
+what.
+*** two major accounting ledger
+**** [[https://river.com/learn/bitcoins-utxo-model/][UTXO-based,Bitcoin]]
+In a UTXO model, the movement of assets is recorded in the form of a directed acyclic graph where the nodes are transactions and the edges are transaction outputs. The users' wallets keep track of a list of unspent outputs associated with all addresses owned by the user, and calculate the users’ balance.
+**** Account/Balance chain, Ethereum
+In this model, assets are represented as balances within users’ accounts, and the balances are stored as a global state of accounts
+** EUTXO
+To understand EUTXO must first understand Transaction work in Cardano
+*** Transaction
+Each transaction can have one or multiple inputs, and one or multiple outputs.
+In abstract
+terms, think of a transaction as the action that unlocks previous outputs, and
+creates new ones.
+**** Transaction Output
++ Includes an address. The signature that belongs to the address is the key to unlock the output.
++ Once unlocked, an output can be used as input. New transactions spend outputs of previous transactions, and produce new outputs that can be consumed by future transactions
++ each output can be spent by exactly one input
+**** Transaction Input
+A transaction input is the output of a previous transaction. Transaction inputs include a pointer and a cryptographic signature that acts as the unlocking key. Key points:
++ pointer refers back to a previous transaction output
++ When an output is unlocked by an input, the blockchain marks the unlocked
+output as "spent".
++ New outputs created by a given
+transaction can then be pointed to by new inputs, and so
+the chain continues.
+*** How UTXO works
+In a UTXO accounting model, transactions consume unspent outputs from
+previous transactions, and produce new outputs that can be used as inputs for
+future transactions.
+*** [[https://docs.cardano.org/learn/eutxo-explainer][EUTXO Transaction]]
++ Smart contracts: these lock-up UTXOs
++ Redeemers: user-supplied data provided to unlock locked assets
++ Datum: user information or other information relevant to your app
++ Context: information like metadata about the transaction being validated.
+*** EUTXO implementation
+two key elements that differentiates it from an Account/Balance model:
++ script, the scripting language is plutus-core
++ data, type of data attached to the output and used as Redeemer
++ Nodes execute these scripts during transaction validation ‘live’ on the chain. The scripts can lock UTXOs in the form of validator scripts or as minting policies, which control the minting and burning of native tokens.
+
+*** How does the EUTXO model extend UTXO
+[[https://docs.cardano.org/learn/eutxo-explainer][EUTXO model]] extends the UTXO model in two ways
+**** generalizes the concept of address
+By using the lock-and-key analogy.  Instead of restricting locks to public keys and keys to signatures, addresses in the EUTXO model can contain arbitrary logic in the form of scripts. The transaction will look up the script provided by the output's address and will execute the script if the transaction can use the output as an input.
+**** outputs can carry arbitrary data
+Output can carry arbitrary in addition to an address and value. This makes scripts much more powerful by allowing them to carry state
+
+*** [[https://www.horizen.io/blockchain-academy/technology/expert/utxo-vs-account-model/][UTXO vs EUTXO]]
+each UTXo output has:
++ address
++ value
+When it was extended to eUTXO additionally it has
++ datuma
+
+
+*** [[id:803c046e-457a-4546-a4e1-ba136a0cb7da][minting]] policy
+currency symbol has to be hexadicimal
+*** transactions cant create or remove tokens, exception is the fees
+*** fees depend on the size of transaction
+*** script takes more fees if needs more resoruce
+*** currency symbol is hex for its the hash of the minting policy script
+for each native token the currency symbol is looked up and that script is executed along with other validation scripts.

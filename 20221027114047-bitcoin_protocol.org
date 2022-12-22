@@ -1,0 +1,51 @@
+:PROPERTIES:
+:ID:       be543cf8-d3fc-4567-bc76-6d3f61b07246
+:END:
+#+title: bitcoin-protocol
+
+* [[https://en.bitcoin.it/wiki/Protocol_documentation][Bitcoin protocol]]
+** Common standards
+*** hashes
+usually [[http://en.wikipedia.org/wiki/SHA-2][SHA-256]], however [[http://en.wikipedia.org/wiki/RIPEMD][RIPEMD]] also used to save space
+*** Merkel Trees
+binary trees of hashes.
+*** [[https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm][ECDSA]]
+Elliptic Curve Digital Signature. A few related concepts are:
+**** private [[id:a83f2410-3339-4ced-9395-71d1349b00bb][gpg-keys]]
+A number known only to the person that generated it.
+In bitcoin a private key is a single unsigned 256 bit integer (32 bytes)
+**** public key
+A number that corresponds with the private key, but does not have to remain secret
++ public keys can be calculated from private keys, but not the other way
++ public keys can be used to determine if a [[id:b099bd80-c0d0-47fc-8257-c65b24b1d7c2][DigitalSignature]] is genuine
+**** [[id:b099bd80-c0d0-47fc-8257-c65b24b1d7c2][DigitalSignature]]
+A number that proves a signing operation took place
++ mathematically generated
+  + hash of something to be signed
+  + private key
+
+**** Primitives
+ECDSA makes use of these fundamental variables:
++ ~r~ and ~s~, numbers uniquely represent signature
++ ~z~ the hash of the message we want to sign
++ ~k~ cryptographicly secure random number which is used as nonce to calculate ~r~ and ~s~
++ d_{A} and Q_{A}: private key number and public key point respectively, used to sign and verify the message
+
+**** Signing Algorithm
+computes the signature pair (r, s) from d_{A} and z
+
+**** Verification Algorithm
+
+**** Transaction Verification
+TX are cryptogarphically signed records that reassign ownership of Bitcoin to new address. Transactions have:
++ input, records which reference the funds from other previous TX
++ outputs, records which determine the new owner of the transferred Bitcoins, which will be referenced as input to future TX
+
+**** Addresses
+A bitcoin address is in fact the hash of the ECDSA public key computed :
+#+begin_src python
+Version = 1 byte of 0 (zero); on the test network, this is 1 byte of 111
+Key hash = Version concatenated with RIPEMD-160(SHA-256(public key))
+Checksum = 1st 4 bytes of SHA-256(SHA-256(Key hash))
+Bitcoin Address = Base58Encode(Key hash concatenated with Checksum)
+#+end_src

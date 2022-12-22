@@ -1,0 +1,26 @@
+:PROPERTIES:
+:ID:       46eb8c6e-a23b-4c3b-bcf2-c6833da9a334
+:END:
+#+title: AddressInEra
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Address.html#t:AddressInEra][AddressInEra]]
+An [[id:aec0c40a-2d89-412c-b65a-5e5a8a404737][address]]  that can be used in a particular ledger era
+All current ledger eras support Byron addresses,[[id:0f903044-d427-40a4-97aa-27406a3824ad][ByronAddr]] . Shelley addresses, [[id:e25bfe71-f886-451d-8f8f-555680db9d2e][ShelleyAddr]]  are supported in the ShelleyEra and later eras.
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Addresses in the context of a ledger era
+--
+
+-- | An 'Address' that can be used in a particular ledger era.
+--
+-- All current ledger eras support Byron addresses. Shelley addresses are
+-- supported in the 'ShelleyEra' and later eras.
+--
+data AddressInEra era where
+     AddressInEra :: AddressTypeInEra addrtype era
+                  -> Address addrtype
+                  -> AddressInEra era
+#+end_src
+** Consstructor
+AddressInEra ∷[[id:3b87ff3f-f08a-42c2-8990-aab71f19e89a][AddressTypeInEra]]  addrtype era →[[id:aec0c40a-2d89-412c-b65a-5e5a8a404737][ address]]  addrtype → AddressInEra era

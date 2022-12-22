@@ -1,0 +1,31 @@
+:PROPERTIES:
+:ID:       76a5a635-d226-4aee-8654-906da6b1aa2f
+:END:
+#+title: ScriptInEra
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:ScriptInEra][ScriptInEra]]
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Scripts in the context of a ledger era
+--
+
+data ScriptInEra era where
+     ScriptInEra :: ScriptLanguageInEra lang era
+                 -> Script lang
+                 -> ScriptInEra era
+
+deriving instance Show (ScriptInEra era)
+
+-- The GADT in the ScriptInEra constructor requires a custom instance
+instance Eq (ScriptInEra era) where
+    (==) (ScriptInEra langInEra  script)
+         (ScriptInEra langInEra' script') =
+      case testEquality (languageOfScriptLanguageInEra langInEra)
+                        (languageOfScriptLanguageInEra langInEra') of
+        Nothing   -> False
+        Just Refl -> script == script'
+
+#+end_src
+** Constructor
++ [[id:dbb6a183-2ea7-43c3-b416-5106d2892db8][ScriptLanguageInEra]] ->[[id:7eea1f63-7556-428d-84ad-a23a0d2f13da][ Script]]

@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       fd73cd0a-6123-4091-9017-cdba6f38fb45
+:END:
+#+title: ProtocolParameters
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-ProtocolParameters.html#t:ProtocolParameters][ProtocolParameters]]
+The values of the set of updatable protocol parameters. At any particular point on the chain there is a current set of parameters in use.
+These parameters can be updated (at epoch boundaries) via an UpdateProposal, which contains a ProtocolParametersUpdate.
+The ProtocolParametersUpdate is essentially a diff for the ProtocolParameters.
+There are also parameters fixed in the Genesis file. See GenesisParameters.

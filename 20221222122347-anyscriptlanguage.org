@@ -1,0 +1,39 @@
+:PROPERTIES:
+:ID:       f9cbacfe-8dfe-4981-906c-c718b98622b9
+:END:
+#+title: AnyScriptLanguage
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Script.html#t:AnyScriptLanguage][AnyScriptLanguage]]
+
+#+begin_src haskell
+data AnyScriptLanguage where
+     AnyScriptLanguage :: ScriptLanguage lang -> AnyScriptLanguage
+
+deriving instance (Show AnyScriptLanguage)
+
+instance Eq AnyScriptLanguage where
+    a == b = fromEnum a == fromEnum b
+
+instance Ord AnyScriptLanguage where
+    compare a b = compare (fromEnum a) (fromEnum b)
+
+instance Enum AnyScriptLanguage where
+    toEnum 0 = AnyScriptLanguage (SimpleScriptLanguage SimpleScriptV1)
+    toEnum 1 = AnyScriptLanguage (SimpleScriptLanguage SimpleScriptV2)
+    toEnum 2 = AnyScriptLanguage (PlutusScriptLanguage PlutusScriptV1)
+    toEnum 3 = AnyScriptLanguage (PlutusScriptLanguage PlutusScriptV2)
+    toEnum err = error $ "AnyScriptLanguage.toEnum: bad argument: " <> show err
+
+    fromEnum (AnyScriptLanguage (SimpleScriptLanguage SimpleScriptV1)) = 0
+    fromEnum (AnyScriptLanguage (SimpleScriptLanguage SimpleScriptV2)) = 1
+    fromEnum (AnyScriptLanguage (PlutusScriptLanguage PlutusScriptV1)) = 2
+    fromEnum (AnyScriptLanguage (PlutusScriptLanguage PlutusScriptV2)) = 3
+
+instance Bounded AnyScriptLanguage where
+    minBound = AnyScriptLanguage (SimpleScriptLanguage SimpleScriptV1)
+    maxBound = AnyScriptLanguage (PlutusScriptLanguage PlutusScriptV2)
+
+
+#+end_src
+** Constructor
++ [[id:a4f1476a-37fa-4e8e-9690-10a29bb3780f][ScriptLanguage]]

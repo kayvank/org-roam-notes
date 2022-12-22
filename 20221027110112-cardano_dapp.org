@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       84bc6989-bca1-4fa7-b4c4-03c66192f3b9
+:END:
+#+title: cardano-dApp
+* dApp dev as discussed in tech meeting of Oct/27/22
+looking for ways to document howtos and cook books. Here is a sample of some people thave have already sone this work
+* [[https://demeter.run/][demeter.run]]

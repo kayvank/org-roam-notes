@@ -1,0 +1,29 @@
+:PROPERTIES:
+:ID:       1c7e10bc-2b64-4620-a848-83e2b77616a6
+:END:
+#+title:TxScriptValidity
+
+*  [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxScriptValidity][TxScriptValidity]]
+A representation of whether the era supports tx script validity.
+
+The Alonzo and subsequent eras support script validity.
+
+#+begin_src haskell
+-- | A representation of whether the era supports tx script validity.
+--
+-- The Alonzo and subsequent eras support script validity.
+--
+data TxScriptValidity era where
+  TxScriptValidityNone :: TxScriptValidity era
+
+  -- | Tx script validity is supported in transactions in the 'Alonzo' era onwards.
+  TxScriptValidity
+    :: TxScriptValiditySupportedInEra era
+    -> ScriptValidity
+    -> TxScriptValidity era
+
+deriving instance Eq   (TxScriptValiditySupportedInEra era)
+deriving instance Show (TxScriptValiditySupportedInEra era)
+#+end_src
+** Constructor
++ [[id:3362f3a4-0b99-48dd-a192-e5020f268acf][ScriptValidity]]

@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID:       e25bfe71-f886-451d-8f8f-555680db9d2e
+:END:
+#+title: ShelleyAddr
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Address.html#g:3][ShelleyArr]]
+A type used as tag to distinguish Sheeley Addresses.
+
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Payment address types
+--
+
+-- | A type used as a tag to distinguish Byron addresses.
+data ByronAddr
+
+-- | A type used as a tag to distinguish Shelley addresses.
+data ShelleyAddr
+
+instance HasTypeProxy ByronAddr where
+    data AsType ByronAddr = AsByronAddr
+    proxyToAsType _ = AsByronAddr
+
+instance HasTypeProxy ShelleyAddr where
+    data AsType ShelleyAddr = AsShelleyAddr
+    proxyToAsType _ = AsShelleyAddr
+#+end_src

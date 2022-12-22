@@ -1,0 +1,47 @@
+:PROPERTIES:
+:ID:       007111b4-b6cc-4fca-848e-fe1888bf5a52
+:END:
+#+title: TxId
+
+* [[https://input-output-hk.github.io/ouroboros-network/cardano-ledger/Cardano-Chain-UTxO-Tx.html#t:TxId][TxId]]
+returns the transaction identifier s the Hash of Tx
+
+#+begin_src haskell
+--------------------------------------------------------------------------------
+-- TxIn
+--------------------------------------------------------------------------------
+
+-- | Transaction arbitrary input
+data TxIn
+  -- | TxId = Which transaction's output is used
+  -- | Word32 = Index of the output in transaction's outputs
+  = TxInUtxo TxId Word32
+  deriving (Eq, Ord, Generic, Show)
+  deriving anyclass NFData
+
+instance B.Buildable TxIn where
+  build (TxInUtxo txInHash txInIndex) =
+    bprint ("TxInUtxo " . shortHashF . " #" . int) txInHash txInIndex
+
+-- Used for debugging purposes only
+instance ToJSON TxIn where
+
+instance ToCBOR TxIn where
+  toCBOR (TxInUtxo txInHash txInIndex) =
+    encodeListLen 2 <> toCBOR (0 :: Word8) <> encodeKnownCborDataItem
+      (txInHash, txInIndex)
+
+  encodedSizeExpr size _ = 2 + knownCborDataItemSizeExpr
+    (szCases [Case "TxInUtxo" $ size $ Proxy @(TxId, Word32)])
+
+instance FromCBOR TxIn where
+  fromCBOR = do
+    enforceSize "TxIn" 2
+    tag <- fromCBOR @Word8
+    case tag of
+      0 -> uncurry TxInUtxo <$> decodeKnownCborDataItem
+      _ -> cborError $ DecoderErrorUnknownTag "TxIn" tag
+
+instance HeapWords TxIn where
+  heapWords (TxInUtxo txid w32) = heapWords2 txid w32
+#+end_src

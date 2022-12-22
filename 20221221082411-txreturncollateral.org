@@ -1,0 +1,18 @@
+:PROPERTIES:
+:ID:       3d953a98-68cf-4cec-b79c-d692a11224cc
+:END:
+#+title: TxReturnCollateral
+*  [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxReturnCollateral][TxReturnCollateral]]
+
+#+begin_src haskell
+data TxReturnCollateral ctx era where
+
+     TxReturnCollateralNone :: TxReturnCollateral ctx era
+
+     TxReturnCollateral     :: TxTotalAndReturnCollateralSupportedInEra era
+                            -> TxOut ctx era
+                            -> TxReturnCollateral ctx era
+
+deriving instance Eq   (TxReturnCollateral ctx era)
+deriving instance Show (TxReturnCollateral ctx era)
+#+end_src

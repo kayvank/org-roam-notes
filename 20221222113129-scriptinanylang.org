@@ -1,0 +1,72 @@
+:PROPERTIES:
+:ID:       b480c849-0680-4ad9-a6d0-745f5dc97810
+:END:
+#+title: ScriptInAnyLang
+
+Sometimes it is necessary to handle all languages without making static type distinctions between languages. For example, when reading external input, or before the era context is known
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Scripts in any language
+--
+
+-- | Sometimes it is necessary to handle all languages without making static
+-- type distinctions between languages. For example, when reading external
+-- input, or before the era context is known.
+--
+-- Use 'toScriptInEra' to convert to a script in the context of an era.
+--
+data ScriptInAnyLang where
+     ScriptInAnyLang :: ScriptLanguage lang
+                     -> Script lang
+                     -> ScriptInAnyLang
+
+deriving instance Show ScriptInAnyLang
+
+-- The GADT in the ScriptInAnyLang constructor requires a custom Eq instance
+instance Eq ScriptInAnyLang where
+    (==) (ScriptInAnyLang lang  script)
+         (ScriptInAnyLang lang' script') =
+      case testEquality lang lang' of
+        Nothing   -> False
+        Just Refl -> script == script'
+
+instance ToJSON ScriptInAnyLang where
+  toJSON (ScriptInAnyLang l s) =
+    object [ "scriptLanguage" .= show l
+           , "script" .= obtainScriptLangConstraint l
+                           (serialiseToTextEnvelope Nothing s)
+           ]
+      where
+       obtainScriptLangConstraint
+         :: ScriptLanguage lang
+         -> (IsScriptLanguage lang => a)
+         -> a
+       obtainScriptLangConstraint (SimpleScriptLanguage SimpleScriptV1) f = f
+       obtainScriptLangConstraint (SimpleScriptLanguage SimpleScriptV2) f = f
+       obtainScriptLangConstraint (PlutusScriptLanguage PlutusScriptV1) f = f
+       obtainScriptLangConstraint (PlutusScriptLanguage PlutusScriptV2) f = f
+
+instance FromJSON ScriptInAnyLang where
+  parseJSON = Aeson.withObject "ScriptInAnyLang" $ \o -> do
+    textEnvelopeScript <- o .: "script"
+    case textEnvelopeToScript textEnvelopeScript of
+      Left textEnvErr -> fail $ displayError textEnvErr
+      Right (ScriptInAnyLang l s) -> pure $ ScriptInAnyLang l s
+
+-- | Convert a script in a specific statically-known language to a
+-- 'ScriptInAnyLang'.
+--
+-- No inverse to this is provided, just do case analysis on the 'ScriptLanguage'
+-- field within the 'ScriptInAnyLang' constructor.
+--
+toScriptInAnyLang :: Script lang -> ScriptInAnyLang
+toScriptInAnyLang s@(SimpleScript v _) =
+    ScriptInAnyLang (SimpleScriptLanguage v) s
+toScriptInAnyLang s@(PlutusScript v _) =
+    ScriptInAnyLang (PlutusScriptLanguage v) s
+
+instance HasTypeProxy ScriptInAnyLang where
+    data AsType ScriptInAnyLang = AsScriptInAnyLang
+    proxyToAsType _ = AsScriptInAnyLang
+#+end_src

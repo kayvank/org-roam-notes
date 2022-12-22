@@ -1,0 +1,80 @@
+:PROPERTIES:
+:ID:       d1f3e4df-d351-44c8-a0f5-9b5c9df1e893
+:END:
+#+title: AnyPlutusScriptVersion
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Script.html#t:AnyPlutusScriptVersion][AnyPlutusScriptVersion]]
+
+#+begin_src haskell
+data AnyPlutusScriptVersion where
+     AnyPlutusScriptVersion :: PlutusScriptVersion lang
+                            -> AnyPlutusScriptVersion
+
+deriving instance (Show AnyPlutusScriptVersion)
+
+instance Eq AnyPlutusScriptVersion where
+    a == b = fromEnum a == fromEnum b
+
+instance Ord AnyPlutusScriptVersion where
+    compare a b = compare (fromEnum a) (fromEnum b)
+
+instance Enum AnyPlutusScriptVersion where
+    toEnum 0 = AnyPlutusScriptVersion PlutusScriptV1
+    toEnum 1 = AnyPlutusScriptVersion PlutusScriptV2
+    toEnum err = error $ "AnyPlutusScriptVersion.toEnum: bad argument: " <> show err
+
+    fromEnum (AnyPlutusScriptVersion PlutusScriptV1) = 0
+    fromEnum (AnyPlutusScriptVersion PlutusScriptV2) = 1
+
+instance Bounded AnyPlutusScriptVersion where
+    minBound = AnyPlutusScriptVersion PlutusScriptV1
+    maxBound = AnyPlutusScriptVersion PlutusScriptV2
+
+instance ToCBOR AnyPlutusScriptVersion where
+    toCBOR = toCBOR . fromEnum
+
+instance FromCBOR AnyPlutusScriptVersion where
+    fromCBOR = do
+      n <- fromCBOR
+      if n >= fromEnum (minBound :: AnyPlutusScriptVersion) &&
+         n <= fromEnum (maxBound :: AnyPlutusScriptVersion)
+        then return $! toEnum n
+        else fail "plutus script version out of bounds"
+
+instance ToJSON AnyPlutusScriptVersion where
+    toJSON (AnyPlutusScriptVersion PlutusScriptV1) =
+      Aeson.String "PlutusScriptV1"
+    toJSON (AnyPlutusScriptVersion PlutusScriptV2) =
+      Aeson.String "PlutusScriptV2"
+
+parsePlutusScriptVersion :: Text -> Aeson.Parser AnyPlutusScriptVersion
+parsePlutusScriptVersion t =
+  case t of
+    "PlutusScriptV1" -> return (AnyPlutusScriptVersion PlutusScriptV1)
+    "PlutusScriptV2" -> return (AnyPlutusScriptVersion PlutusScriptV2)
+    _                -> fail "Expected PlutusScriptV1 or PlutusScriptV2"
+
+instance FromJSON AnyPlutusScriptVersion where
+    parseJSON = Aeson.withText "PlutusScriptVersion" parsePlutusScriptVersion
+
+instance Aeson.FromJSONKey AnyPlutusScriptVersion where
+    fromJSONKey = Aeson.FromJSONKeyTextParser parsePlutusScriptVersion
+
+instance Aeson.ToJSONKey AnyPlutusScriptVersion where
+    toJSONKey = Aeson.toJSONKeyText toText
+      where
+        toText :: AnyPlutusScriptVersion -> Text
+        toText (AnyPlutusScriptVersion PlutusScriptV1) = "PlutusScriptV1"
+        toText (AnyPlutusScriptVersion PlutusScriptV2) = "PlutusScriptV2"
+
+toAlonzoLanguage :: AnyPlutusScriptVersion -> Alonzo.Language
+toAlonzoLanguage (AnyPlutusScriptVersion PlutusScriptV1) = Alonzo.PlutusV1
+toAlonzoLanguage (AnyPlutusScriptVersion PlutusScriptV2) = Alonzo.PlutusV2
+
+fromAlonzoLanguage :: Alonzo.Language -> AnyPlutusScriptVersion
+fromAlonzoLanguage Alonzo.PlutusV1 = AnyPlutusScriptVersion PlutusScriptV1
+fromAlonzoLanguage Alonzo.PlutusV2 = AnyPlutusScriptVersion PlutusScriptV2
+
+#+end_src
+** Constructor
++ [[id:325f286d-780a-4fff-817d-0fe13890075d][PlutusScriptVersion]]

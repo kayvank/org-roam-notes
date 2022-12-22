@@ -1,0 +1,20 @@
+:PROPERTIES:
+:ID:       a03df74b-1d47-4a02-a03d-46cdcc4e4fad
+:END:
+#+title: type-driven-dev
+
+* Idris
+** links to my book
+[[pdf:~/Documents/ebooks/Type-Driven_Development_with_Idris.pdf::352++0.00][Type-Driven_Development_with_Idris.pdf: Page 352]]
+** Chapter-1
+to build exectuable:
+
+#+begin_src idris
+idris  Hello.idr -o Hello
+#+end_src
+
+
+as part of PLT-777, removing plutus-ledger from morconidependies, we made this change:
+https://github.com/input-output-hk/plutus-apps/pull/792/files#diff-3d1afb1d4f97506d352d0829e3891338494050a9cbddfb2251615a7c38cbeaf8L35
+
+in

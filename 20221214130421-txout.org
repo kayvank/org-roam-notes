@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:       2cd1cdf4-0b6a-4d83-8bff-240da5fd79f1
+:END:
+#+title: TxOut
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxOut][TxOut]]
+[[https://docs.cardano.org/learn/understanding%20outputs%20and%20inputs][Transaction output includes]]
+** address
+think of it as the key to unlock the output
+** value
+
+
+#+begin_src haskell
+data TxOut ctx era = TxOut (AddressInEra    era)
+                           (TxOutValue      era)
+                           (TxOutDatum ctx  era)
+                           (ReferenceScript era)
+#+end_src
+*** Constructors
++ [[id:46eb8c6e-a23b-4c3b-bcf2-c6833da9a334][AddressInEra]] -> [[id:4e575460-a5ed-4b73-aaa2-e10b88e0dc84][TxOutValue]] -> [[id:5ebf7c87-82e6-43bf-9b1c-56702657204c][TxOutDatum]] ->[[id:d3fc9f5e-8fdd-4169-86e8-8113f4002035][ReferenceScript]]
+
+** [[id:aec0c40a-2d89-412c-b65a-5e5a8a404737][address]]

@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:       a4f1476a-37fa-4e8e-9690-10a29bb3780f
+:END:
+#+title: ScriptLanguage
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Value level representation for script languages
+--
+data ScriptLanguage lang where
+
+     SimpleScriptLanguage :: SimpleScriptVersion lang -> ScriptLanguage lang
+
+     PlutusScriptLanguage :: PlutusScriptVersion lang -> ScriptLanguage lang
+
+deriving instance (Eq   (ScriptLanguage lang))
+deriving instance (Show (ScriptLanguage lang))
+#+end_src
+** Constructors
++ [[id:55842419-3472-46bf-956a-5b57a69830d4][SimpleScriptVersion]]
++ [[id:325f286d-780a-4fff-817d-0fe13890075d][PlutusScriptVersion]]

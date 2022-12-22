@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       b225f0c7-e825-4f26-aaef-e601ad85dc3d
+:END:
+#+title: Shelley
+* Shelly address
+** Specs document
+[[https://hydra.iohk.io/build/790053/download/1/delegation_design_spec.pdf][Engineering Design Specification for Delegation and Incentives in Cardano–Shelley]]

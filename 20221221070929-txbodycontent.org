@@ -1,0 +1,48 @@
+:PROPERTIES:
+:ID:       6e2137cf-2eef-4c04-8372-feea2fde7fee
+:END:
+#+title: TxBodyContent
+
+***** [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxBodyContent][TxBodyContent]]
+module Cardano.Api.TxBody
+
+#+begin_src haskell
+data TxBodyContent build era =
+     TxBodyContent {
+       txIns              :: TxIns build era,
+       txInsCollateral    :: TxInsCollateral era,
+       txInsReference     :: TxInsReference build era,
+       txOuts             :: [TxOut CtxTx era],
+       txTotalCollateral  :: TxTotalCollateral era,
+       txReturnCollateral :: TxReturnCollateral CtxTx era,
+       txFee              :: TxFee era,
+       txValidityRange    :: (TxValidityLowerBound era, TxValidityUpperBound era),
+       txMetadata         :: TxMetadataInEra era,
+       txAuxScripts       :: TxAuxScripts era,
+       txExtraKeyWits     :: TxExtraKeyWitnesses era,
+       txProtocolParams   :: BuildTxWith build (Maybe ProtocolParameters),
+       txWithdrawals      :: TxWithdrawals  build era,
+       txCertificates     :: TxCertificates build era,
+       txUpdateProposal   :: TxUpdateProposal era,
+       txMintValue        :: TxMintValue    build era,
+       txScriptValidity   :: TxScriptValidity era
+     }
+     deriving (Eq, Show)
+#+end_src
+** [[id:c5ca1ed8-22cd-4e01-ab9b-843bfe386131][TxIn]]
+** [[id:1d156b7b-565a-4a9b-b677-296b21b93eb5][TxInsCollateral]]
+** [[id:b578954b-7e83-445e-9fbf-f99428f959d4][TxInsReference]]
+** [[id:40f7ea56-773d-4067-832f-94c9b08d508b][TxTotalCollateral]]
+** [[id:3d953a98-68cf-4cec-b79c-d692a11224cc][TxReturnCollateral]]
+** [[id:69149f41-c95e-4058-945f-84920c19aaf3][TxFee]]
+** [[id:d1cd95ec-f92e-46b3-af84-88fe62b30cb1][txValidityRange]]
+** [[id:6efbdb04-8ae1-4827-acfe-7d7d6fb42c1a][TxMetadataInEra]]
+** [[id:80ab3342-c908-46e2-968f-64c24a45b56f][TxAuxScripts]]
+** [[id:f542c545-b3b0-4103-8b6a-e25c66c840d4][TxExtraKeyWitnessesSupportedInEra]]
+** [[id:fd73cd0a-6123-4091-9017-cdba6f38fb45][ProtocolParameters]]
+** [[id:43c05a04-5bc2-4927-95e8-a93d077a89bf][TxWithdrawls]]
+** [[id:cfcaace5-799c-4c90-a3e6-5d30d4ce67bd][TxCertificates]]
+** [[id:6aa9003b-e08f-43f9-aabb-a29db52986c8][TxUpdateProposal]]
+** [[id:e09651f1-0df6-484c-9676-72fbc7b9f4ab][TxMintValue]]
+** [[id:1c7e10bc-2b64-4620-a848-83e2b77616a6][TxScriptValidity]]
+** [[id:2cd1cdf4-0b6a-4d83-8bff-240da5fd79f1][TxOut]]

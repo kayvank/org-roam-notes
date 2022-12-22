@@ -1,0 +1,25 @@
+:PROPERTIES:
+:ID:       6aa9003b-e08f-43f9-aabb-a29db52986c8
+:END:
+#+title: TxUpdateProposal
+
+* [https://input-output-hk.github.io/cardano-node/cardano-api/lib/src/Cardano.Api.html#TxCertificates][TxUpdateProposal]
+
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Transaction update proposal (era-dependent)
+--
+
+data TxUpdateProposal era where
+
+     TxUpdateProposalNone :: TxUpdateProposal era
+
+     TxUpdateProposal     :: UpdateProposalSupportedInEra era
+                          -> UpdateProposal
+                          -> TxUpdateProposal era
+
+deriving instance Eq   (TxUpdateProposal era)
+deriving instance Show (TxUpdateProposal era)
+
+#+end_src

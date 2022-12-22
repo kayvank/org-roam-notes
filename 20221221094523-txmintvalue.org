@@ -1,0 +1,27 @@
+:PROPERTIES:
+:ID:       e09651f1-0df6-484c-9676-72fbc7b9f4ab
+:END:
+#+title: TxMintValue
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:TxMintValue][TxMintValue]]
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Value minting within transactions (era-dependent)
+--
+
+data TxMintValue build era where
+
+     TxMintNone  :: TxMintValue build era
+
+     TxMintValue :: MultiAssetSupportedInEra era
+                 -> Value
+                 -> BuildTxWith build
+                      (Map PolicyId (ScriptWitness WitCtxMint era))
+                 -> TxMintValue build era
+
+deriving instance Eq   (TxMintValue build era)
+deriving instance Show (TxMintValue build era)
+
+
+#+end_src
