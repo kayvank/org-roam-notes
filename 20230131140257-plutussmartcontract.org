@@ -1,0 +1,91 @@
+:PROPERTIES:
+:ID:       09137fe2-208a-40fd-ae88-6505ba3b6b83
+:END:
+#+title: PlutusSmartContract
+* Plutus smart contracts
+Plutus smart contract consists of two parts
++ off-chian-code:  written in Plutus Application Framework, PAF off-chain-code
++ onchain-code: compiled by plutus compiler to [[id:47430d44-7881-49bc-8d46-e8d42c3bcba8][plutus-core]]
+
+* Accounting model used by Plutus
+** [[https://docs.cardano.org/learn/eutxo-explainer][EUTXO]]
+EUTXO extends UTXO by allowing output address to contain complex logic and adding custom data to all outputs
+[[https://www.essentialcardano.io/article/the-eutxo-handbook][see the hadnbook for detail]]
+*** UTXO
+transactions have:
++ input
++ output
+where the input is the output of the previous transactions.
+Once the output is used by an input, it becomes *spent*
+the output is specified by an address, public-key, or public-key-hash and a value
+* Plutus-Core
+Scripting language to implement EUTXO model.
++ Cardano node executes the script and hence they are on-chain code.
++ The scripts will be executed by nodes during transaction validation, /live/ on the chain.
+
+  In practice, when developing smart contracts, we write validation scripts in Haskell which compiles to plutus-core.
+* [[https://github.com/input-output-hk/plutus-apps#the-plutus-application-framework][PAF]]
+Applications deployed using PAF can be run on the Plutus application backend, which provides run-time support
+* Plutus Application Backend [[https://github.com/input-output-hk/plutus-apps#the-plutus-application-framework][PAB]]
+Manges application instances and application requests to
++ wallet backend
++ node
++ application state
++ HTTP API
+
+* Ledger
+** Script and EUTXO
+*** UTXO based ledger
+**** pay-to-public-key
+oupouts have public-key, hash of public-key. the spending TX must be signed by the private-key of that public-key
+*** EUTXO based ledger
+**** pay-script
+output can be locked by (the hash of) a script
+***** Script
+A program that decides whether or not the TX which spends the output is authorized to do so. Such script is called *validator-script*
+Validator scripts are passed three parameters
+******* datum
+data attached to the output the script is locking, hash is used, used to carry state.
+for instance in an atomic swap this contains the keys for the parties
+******* redeemer
+data attached to the input that is doing the spending. typically used to provide an input to the script from the spender
+unused in atomic swap
+******* context
+data which represents information about the TX doing the spending. This is used to make assertion about the way the output is being sent
+in atomic swap, the context contains a representation of the transaction
+****** logic
+the logic of the validator script is then: does the TX make a payment from the 2nd party to the 1st?
+***** Kinds of Script
+****** simple
+****** Plutus Language V?
+
+* EUTXO, datum, redeemer, and script context
+TX contain
++ arbitrary number of inputs
++ arbitrary number of output
+The effect of TX is to consume input and produce outputs
+** Unspent Transaction Output
++ utxo is produced by a TX, and can only be spent by another TX
++ utxo, orig model, contains a wallet address and a valued.
++ inside a TX, a utxo is uniquely identified by the wallet address. And it can only be spent by a TX if it is signed by that wallet private key.
+** Extened UTXO model
+it extends the orig model with a new kind of UTO: script UTXO
+*** Script Utxo
+A script UTXO contains a
++ value
++ a plutus script
++ a piece of data called datum
+The scipt UTXO is identified by the hash of the script
+*** Spending Transaction
+for spending TX to spend, the TX must provide a piece of data to the script:
++ redeemer
+
+The script then is run and it must succeed in order for the TX to be allowed spent the UTXO
+In addition to the redeemer, the script also has access to :
++ datum contained in the UTXO
++ context, the details of the transaction trying to spend it
+
+ The only thing a Plutus script does is to determine whether a transaction can spend the script UTXO that contains the script.
+
+ Checking transaction validity is done by the ledger rules/
+ Updating the state of a smart contract is done by constructing the transaction to produce a new script UTXO with an updated datum.

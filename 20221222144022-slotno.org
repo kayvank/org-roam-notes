@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:       9365108e-dfc7-4654-9c41-809664a70460
+:END:
+#+title: SlotNo
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:SlotNo][SlotNo]]
+
+**  Constructor
+#+begin_src haskell
+newtype SlotNo = SlotNo { unSlotNo :: Word64 }
+#+end_src

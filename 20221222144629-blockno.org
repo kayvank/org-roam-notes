@@ -1,0 +1,10 @@
+:PROPERTIES:
+:ID:       4932db20-d9dd-4bec-9a09-b5c49948d998
+:END:
+#+title: BlockNo
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#t:BlockNo][BlockNo]]
+
+#+begin_src haskell
+newtype BlockNo = BlockNo { unBlockNo :: Word64 }
+#+end_src

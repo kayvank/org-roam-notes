@@ -3,6 +3,7 @@
 :END:
 #+title: ScriptInAnyLang
 
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api-Script.html#t:ScriptInAnyLang][ScriptInAnyLang]]
 Sometimes it is necessary to handle all languages without making static type distinctions between languages. For example, when reading external input, or before the era context is known
 
 #+begin_src haskell

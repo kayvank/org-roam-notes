@@ -1,0 +1,43 @@
+:PROPERTIES:
+:ID:       757c0dd4-3014-4da7-a8c2-eea9715081c3
+:END:
+#+title: ChainPoint
+
+* [[https://input-output-hk.github.io/cardano-node/cardano-api/lib/Cardano-Api.html#g:19][Points on Chain]]
+
+#+begin_src haskell
+-- ----------------------------------------------------------------------------
+-- Chain points
+--
+
+data ChainPoint = ChainPointAtGenesis
+                | ChainPoint !SlotNo !(Hash BlockHeader)
+  deriving (Eq, Show)
+
+instance Ord ChainPoint where
+  compare ChainPointAtGenesis ChainPointAtGenesis = EQ
+  compare ChainPointAtGenesis _ = LT
+  compare _ ChainPointAtGenesis = GT
+  compare (ChainPoint sn _) (ChainPoint sn' _) = compare sn sn'
+
+toConsensusPointInMode :: ConsensusMode mode
+                       -> ChainPoint
+                       -> Consensus.Point (ConsensusBlockForMode mode)
+-- It's the same concrete impl in all cases, but we have to show
+-- individually for each case that we satisfy the type equality constraint
+-- HeaderHash block ~ OneEraHash xs
+toConsensusPointInMode ByronMode   = toConsensusPointHF
+toConsensusPointInMode ShelleyMode = toConsensusPointHF
+toConsensusPointInMode CardanoMode = toConsensusPointHF
+
+fromConsensusPointInMode :: ConsensusMode mode
+                         -> Consensus.Point (ConsensusBlockForMode mode)
+                         -> ChainPoint
+fromConsensusPointInMode ByronMode   = fromConsensusPointHF
+fromConsensusPointInMode ShelleyMode = fromConsensusPointHF
+fromConsensusPointInMode CardanoMode = fromConsensusPointHF
+
+#+end_src
+** Constructor
++ ChainPointAtGenesis
++ [[id:9365108e-dfc7-4654-9c41-809664a70460][SlotNo]] [[id:f36649e2-67d6-4572-b441-be6aabeb8669][Hash]]  [[id:b7949b07-a7f5-40ac-bba1-07c44260bece][BlockHeader]]

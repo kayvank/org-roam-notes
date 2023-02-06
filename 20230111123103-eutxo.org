@@ -1,0 +1,34 @@
+:PROPERTIES:
+:ID:       ee916f54-89e8-44be-986a-5699acdec25d
+:END:
+#+title: eutxo
+
+
+* [[https://cicero.ci.iog.io/api/fact/ffdcd1ee-97e2-4661-936d-4b41086d646a/binary][Extended UTXO Ledger Model]]
+** UTXO model
+transactions consume /unspent outputs/ from previous transactions and produce new outputs which can be used as inputs to later transactions
+
+** Some Extentions to UTXO
+*** Extension to facilitate smart contracts
+Smart contracts are programs that perform automated and irrevocable transfer of funds on the block chain
+**** EUTXO
+An important feature of EUTXO is scripts. Scripts are program that run on block chain and check the validity of transactions.
+***** Enhanced Scripting
++ every transaction has validity interval, interval [SlotNumber]
++ validator scripts make use of information about the pending transaction, validation contexts.
++ validation of an output is performed by running the vlaidator with three inputs:
+  + datum
+  + redeemer
+  + context
+  +
+**** Transaction Identifier
+transaction can be looked up using this unique txId
+**** Input and outputs
+a transaction has a set of Input and a List of outputs
+**** Validator address in outputs
+the address field of the output should contain the address of the validator script for that output.
+**** Script and hashes
+datum object and validators are provided as part of the transaction inputs, event thought they are conceptually part of the output being spent. The rational for this is:
++ the validator V for an output O is not required till O is actually spent.
++ cost of executing a transaction is based on the size of the transaction, including the associated scripts
++ therefor transaction that produces the validator, only pays for the size of the hash. And transaction that runs it pays for the full size of the script
